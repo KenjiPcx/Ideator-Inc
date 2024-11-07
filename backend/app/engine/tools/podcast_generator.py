@@ -4,8 +4,12 @@ from typing import List, Tuple, Optional
 import logging
 from pydantic import BaseModel, Field
 import os
+import re
+from llama_index.core.tools import FunctionTool
 
 logger = logging.getLogger(__name__)
+
+OUTPUT_DIR = "output/tools"
 
 class VoiceSettings(BaseModel):
     stability: float = Field(default=0.5, ge=0, le=1)
@@ -24,7 +28,7 @@ class ElevenLabsGenerator:
         if not self.api_key:
             raise ValueError("ElevenLabs API key not provided")
         
-        self.output_dir = Path("./resources")
+        self.output_dir = Path(OUTPUT_DIR)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         # Default voice IDs for different roles
@@ -64,11 +68,31 @@ class ElevenLabsGenerator:
             logger.exception(e)
             raise
 
-    def generate_podcast(self, segments: List[Tuple[str, str]], output_path: Optional[str] = None) -> str:
+    def _sanitize_filename(self, filename: str) -> str:
+        """
+        Sanitize filename by:
+        1. Converting to lowercase
+        2. Replacing spaces and special chars with underscores
+        3. Ensuring .mp3 extension
+        """
+        # Remove or replace special characters
+        clean_name = re.sub(r'[^\w\s-]', '', filename)
+        # Replace spaces with underscores
+        clean_name = re.sub(r'[-\s]+', '_', clean_name).strip('-_')
+        # Convert to lowercase
+        clean_name = clean_name.lower()
+        # Ensure .mp3 extension
+        if not clean_name.endswith('.mp3'):
+            clean_name = f"{clean_name}.mp3"
+        return clean_name
+
+    def generate_podcast(self, segments: List[Tuple[str, str]], filename: str, session_id: str) -> str:
         """Generate podcast audio from segments"""
         try:
-            if output_path is None:
-                output_path = str(self.output_dir / "podcast.mp3")
+            # Sanitize the filename
+            clean_filename = self._sanitize_filename(filename)
+            os.makedirs(self.output_dir / session_id, exist_ok=True)
+            output_path = str(self.output_dir / session_id / clean_filename)
             
             # Generate and concatenate audio segments
             from pydub import AudioSegment
@@ -79,7 +103,7 @@ class ElevenLabsGenerator:
                 audio_bytes = self.generate_audio_segment(text, speaker)
                 
                 # Save to temporary file
-                temp_path = str(self.output_dir / f"temp_{speaker}.mp3")
+                temp_path = str(self.output_dir / session_id / f"temp_{speaker}.mp3")
                 with open(temp_path, "wb") as f:
                     f.write(audio_bytes)
                 
@@ -99,9 +123,17 @@ class ElevenLabsGenerator:
             final_audio.export(output_path, format="mp3")
             logger.info(f"Podcast generated at: {output_path}")
             
-            return output_path
+            file_url = f"{os.getenv('FILESERVER_URL_PREFIX')}/{output_path}"
+            return file_url
             
         except Exception as e:
             logger.error("Failed to generate podcast audio")
             logger.exception(e)
             raise 
+
+def get_tools(**kwargs):
+    return [FunctionTool.from_defaults(
+        ElevenLabsGenerator(**kwargs).generate_podcast,
+        name="generate_podcast",
+        description="Generate a podcast from a list of text segments with different speakers"
+    )]

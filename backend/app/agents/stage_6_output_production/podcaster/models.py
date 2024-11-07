@@ -1,17 +1,26 @@
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any
 
+class OutlineSegment(BaseModel):
+    topic: str = Field(description="Topic of the segment")
+    key_points: List[str] = Field(description="Key points of the segment")
+    stories: List[str] = Field(description="Stories of the segment")
+    insights: List[str] = Field(description="Insights of the segment")
+
+class PodcastOutline(BaseModel):
+    title: str = Field(description="Engaging podcast title")
+    hook: str = Field(description="Compelling hook that makes listeners stay")
+    segments: List[OutlineSegment] = Field(description="List of speaking segments")
+    target_audience: str = Field(description="Description of ideal listener")
+    unique_angles: List[str] = Field(description="Surprising take 1, Contrarian view 2")
+    actionable_takeaways: List[str] = Field(description="Specific action 1, Strategy 2")
+
 class PodcastSegment(BaseModel):
-    speaker: str = Field(description="Speaker role (host or guest)")
-    text: str = Field(description="Text to be spoken")
+    speaker: str = Field(description="Speaker of the segment")
+    text: str = Field(description="Text of the segment")
 
 class PodcastScript(BaseModel):
-    title: str = Field(description="Engaging podcast title")
-    description: str = Field(description="Brief episode description")
     segments: List[PodcastSegment] = Field(description="List of speaking segments")
-    key_points: List[str] = Field(description="Key insights covered")
-    estimated_duration: str = Field(description="Estimated episode duration")
-    target_audience: str = Field(description="Target audience description")
 
 class ScriptCritique(BaseModel):
     satisfied: bool = Field(description="Whether the script meets quality standards")
