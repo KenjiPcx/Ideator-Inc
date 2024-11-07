@@ -1,0 +1,6 @@
+__pycache__
+storage
+.env
+output
+**/lib
+data
