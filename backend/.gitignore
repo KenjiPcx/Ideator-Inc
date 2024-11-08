@@ -4,3 +4,4 @@ storage
 output
 **/lib
 data
+**/*.ipynb

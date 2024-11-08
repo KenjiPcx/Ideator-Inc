@@ -25,6 +25,8 @@ class JsonValidationHelper(Generic[T]):
         retries = 0
         last_error = None
         current_content = extract_json_from_response(content)
+        if current_content is None:
+            current_content = content
 
         while retries < self.max_retries:
             try:

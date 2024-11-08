@@ -73,6 +73,20 @@ def init_openai():
         dimensions=int(dimensions) if dimensions is not None else None,
         api_key=os.getenv("OPENAI_API_KEY"),
     )
+    
+def init_nvidia_nim():
+    from llama_index.core.constants import DEFAULT_TEMPERATURE
+    from llama_index.llms.nvidia import NVIDIA
+    
+    max_tokens = os.getenv("LLM_MAX_TOKENS")
+    Settings.llm = NVIDIA(
+        # model=os.getenv("MODEL", "meta/llama-3.1-70b-instruct"),
+        # model="nvidia/llama-3.1-nemotron-70b-instruct",
+        model="meta/llama-3.1-70b-instruct",
+        temperature=float(os.getenv("LLM_TEMPERATURE", DEFAULT_TEMPERATURE)),
+        max_tokens=int(max_tokens) if max_tokens is not None else None,
+        api_key=os.getenv("NVIDIA_NIM_API_KEY"),
+    )
 
 def init_aiml():
     from llama_index.core.constants import DEFAULT_TEMPERATURE
