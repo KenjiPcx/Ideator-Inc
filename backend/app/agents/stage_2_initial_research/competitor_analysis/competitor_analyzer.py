@@ -15,7 +15,7 @@ def create_competitor_analyzer(chat_history: List[ChatMessage]):
         )
         
     tools = [
-        FunctionTool.from_defaults(search, name="search", description="Search the web for any information"),
+        # FunctionTool.from_defaults(search, name="search", description="Search the web for any information"),
     ]  
 
     prompt_instructions = dedent("""
@@ -23,33 +23,46 @@ def create_competitor_analyzer(chat_history: List[ChatMessage]):
         You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding.
         
         ### Instructions
-        You are an expert in analyzing competitor and market intelligence data.
-        You are given a user's startup idea with full details, and a list of competitor website data to analyze. Your task is to analyze this data, and return a comprehensive competitive analysis report against the user's startup idea. 
-        You are also able to come up with more hypotheses, and search for additional information on the web to further analyze the data. You might also be given a critique and feedback to improve the report, you are responsible for refining the report based on the feedback.
+        You are an expert in analyzing competitor and market intelligence data. You are given a detailed startup idea from a user, along with competitor website data. Your task is to create a comprehensive competitor analysis report, comparing competitors directly with the user's startup idea.
         
-        ### Analysis
-        Your analysis should cover these key areas:
-        1. A brief overview of the user's startup idea and its features, value proposition, target segments, and pricing strategy or any other key details
-        2. Whether there are any competitors, if not, why not? If there are competitors, follow up with the following steps to compare against the user's startup idea:
-        3. Market Position
-           - Value proposition and target segments
-           - Pricing and positioning strategy
-           - Key differentiators
-        4. Competitive Assessment
-           - Strengths and weaknesses
-           - Feature comparison
-           - Customer feedback analysis
-        5. Summarize a SWOT Analysis
+        The report must be data-rich and rely on specific, real-world examples to back each point, providing an evidence-based comparison.
+        
+        ### Analysis Framework
+        Your analysis should include the following:
+
+        1. **Overview of the User's Startup Idea**
+           - Summarize the startup's features, value proposition, target audience, and pricing model
+           - Include any unique selling points that address specific market needs
+           - Back each aspect with concrete examples (e.g., similar features in the market, target market data)
+
+        2. **Competitor Landscape**
+           - Identify and justify the existence or absence of direct competitors
+           - For each competitor, provide specific examples of their key offerings, market focus, or pricing
+           
+        3. **Market Positioning Comparison**
+           - Value proposition with examples from competitor marketing
+           - Target segments backed by demographic data or competitor statements
+           - Pricing & positioning with exact figures and promotional examples
+           - Key differentiators with specific feature or service examples
+           
+        4. **Competitive Assessment**
+           - Strengths & weaknesses backed by reviews, metrics, or partnerships
+           - Feature comparison table with specific functionality examples
+           - Customer feedback analysis using actual quotes or review data
+           
+        5. **SWOT Analysis Summary**
+           - Strengths: Examples of advantages and exclusive features
+           - Weaknesses: Competitor examples that highlight gaps
+           - Opportunities: Specific market gaps or competitor shortfalls
+           - Threats: Concrete examples of competitive pressures
         
         ### Formatting
-        Construct the analysis in a clear markdown format, utilizing bullet points, tables, and other formatting tools for readability. 
-        Focus on concrete data points and observations from the provided sources. If you want to display visualizations, you can just describe the visualization and another agent will create the visualization.
-        Don't make assumptions or include information not supported by the data.
+        - Use clear markdown formatting with headers and subheaders
+        - Utilize bullet points, tables, and comparison charts
+        - Support each point with specific examples and data
+        - Avoid assumptions or unsupported claims
         
-        Conclude with specific, actionable recommendations based on your findings.
-        
-        ### Tools
-        You are given a search tool to further research any information you need.
+        Conclude with specific, actionable recommendations based on your findings, each supported by competitor examples or market data.
     """)
     
     configured_tools = ToolFactory.from_env(map_result=True)

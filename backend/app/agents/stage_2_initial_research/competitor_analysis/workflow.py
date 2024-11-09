@@ -344,8 +344,20 @@ class CompetitorAnalysisWorkflow(Workflow):
             return ReportEvent(input=result.response.message.content)
         
         if parsed_response.satisfied:
+            ctx.write_event_to_stream(
+                AgentRunEvent(
+                    name=report_critic.name,
+                    msg=f"Critic is satisfied with the report, moving on to generate the final report",
+                )
+            )
             return ReportEvent(input=ctx.data["competitor_analysis_result"])
         
+        ctx.write_event_to_stream(
+            AgentRunEvent(
+                name=report_critic.name,
+                msg=f"Critic is not satisfied with the report, refining the report based on the feedback",
+            )
+        )
         return AnalyzeCompetitorsEvent(input=result.response.message.content)
     
     @step()
