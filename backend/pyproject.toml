@@ -32,6 +32,7 @@ crawl4ai = {extras = ["transformers"], version = "^0.3.72"}
 pydub = "^0.25.1"
 llama-index-llms-nvidia = "^0.2.6"
 llama-index-embeddings-nvidia = "^0.2.4"
+google-search-results = "^2.4.2"
 
 [tool.poetry.dependencies.uvicorn]
 extras = [ "standard" ]

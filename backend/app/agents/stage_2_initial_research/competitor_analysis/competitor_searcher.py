@@ -22,7 +22,7 @@ class CompetitorSearchResponse(BaseModel):
 
 def create_competitor_searcher(chat_history: List[ChatMessage]):
     def curated_competitor_search(search_query: str):
-        return tavily_search(query=search_query, max_results=5, include_domains=["ycombinator.com", "reddit.com", "producthunt.com", "news.ycombinator.com", "hackernews.com", "appsumo.com", "g2.com"])
+        return tavily_search(query=search_query, max_results=10, include_domains=["ycombinator.com", "reddit.com", "tiktok.com", "producthunt.com", "news.ycombinator.com", "hackernews.com", "appsumo.com", "youtube.com" ])
     
     tools = [
         FunctionTool.from_defaults(tavily_search, name="search", description="Search the web for information, it returns a list of urls and content"),

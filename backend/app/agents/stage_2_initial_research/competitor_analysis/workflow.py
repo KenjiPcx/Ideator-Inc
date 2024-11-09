@@ -390,7 +390,7 @@ class CompetitorAnalysisWorkflow(Workflow):
                     
                     ### Report
                     Then we synthesized the information and created this report:
-                    {result.response.message.content}
+                    {ctx.data["competitor_analysis_result"]}
                     
                     ### Sources
                     We used the following sources to compile the report:
@@ -435,6 +435,9 @@ class CompetitorAnalysisWorkflow(Workflow):
     async def _generate_search_queries(self, task: str, chat_history: List[ChatMessage], number_of_queries: int = 5) -> List[str]:
         prompt_template = PromptTemplate(
             dedent("""
+                ### Base Instructions
+                You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding.
+                
                 ### Instructions
                 You are an expert at generating effective search queries to find competitors and similar products. Your goal is to create a diverse set of search queries that will help uncover both direct and indirect competitors.
 
