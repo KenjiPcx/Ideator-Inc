@@ -9,6 +9,9 @@ import UploadImagePreview from "../upload-image-preview";
 import { ChatHandler } from "./chat.interface";
 import { useFile } from "./hooks/use-file";
 import { LlamaCloudSelector } from "./widgets/LlamaCloudSelector";
+import { Send, Loader2 } from "lucide-react";
+import { cn } from "../../../lib/utils";
+import { buttonVariants } from "../button";
 
 const ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "csv", "pdf", "txt", "docx"];
 
@@ -84,12 +87,24 @@ export default function ChatInput(
       e.preventDefault();
       onSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
     }
+    // Auto-adjust height
+    const textarea = e.currentTarget;
+    textarea.style.height = 'inherit';
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // Max height of 200px
+  };
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    props.handleInputChange(e);
+    // Auto-adjust height
+    const textarea = e.currentTarget;
+    textarea.style.height = 'inherit';
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // Max height of 200px
   };
 
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-xl bg-white p-4 shadow-xl space-y-4 shrink-0"
+      className="rounded-lg bg-gray-800 p-4 space-y-4 shrink-0 border border-gray-700 text-white"
     >
       {imageUrl && (
         <UploadImagePreview url={imageUrl} onRemove={() => setImageUrl(null)} />
@@ -105,16 +120,17 @@ export default function ChatInput(
           ))}
         </div>
       )}
-      <div className="flex w-full items-start justify-between gap-4 ">
+      <div className="flex w-full items-end justify-between gap-4">
         <Textarea
           id="chat-input"
           autoFocus
           name="message"
           placeholder="Type a message"
-          className="flex-1 min-h-0 h-[40px]"
+          className="flex-1 min-h-[40px] max-h-[200px] bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-gray-500 focus:ring-0 overflow-y-auto resize-none"
           value={props.input}
-          onChange={props.handleInputChange}
+          onChange={handleInput}
           onKeyDown={handleKeyDown}
+          rows={1}
         />
         <FileUploader
           onFileUpload={handleUploadFile}
@@ -128,8 +144,19 @@ export default function ChatInput(
           props.setRequestData && (
             <LlamaCloudSelector setRequestData={props.setRequestData} />
           )}
-        <Button type="submit" disabled={props.isLoading || !props.input.trim()}>
-          Send message
+        <Button
+          type="submit"
+          disabled={props.isLoading || !props.input.trim()}
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "icon" }),
+            "bg-gray-700 hover:bg-gray-600 text-white disabled:text-gray-400 self-stretch",
+          )}
+        >
+          {props.isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Send className="h-4 w-4" />
+          )}
         </Button>
       </div>
     </form>

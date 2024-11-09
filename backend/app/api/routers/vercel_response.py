@@ -99,7 +99,11 @@ class VercelStreamResponse(StreamingResponse):
     def _event_to_response(event: AgentRunEvent) -> dict:
         return {
             "type": "agent",
-            "data": {"agent": event.name, "text": event.msg},
+            "data": {
+                "workflowName": event.workflow_name,
+                "agent": event.name,
+                "text": event.msg,
+            },
         }
 
     @classmethod

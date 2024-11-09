@@ -1,6 +1,7 @@
 import { JSONValue } from "ai";
 import ChatInput from "./chat-input";
 import ChatMessages from "./chat-messages";
+import { stores } from "@/app/stores/agentStore";
 
 export { type ChatHandler } from "./chat.interface";
 export { ChatInput, ChatMessages };
@@ -58,6 +59,7 @@ export type EventData = {
 
 export type AgentEventData = {
   agent: string;
+  workflowName: keyof typeof stores;
   text: string;
 };
 

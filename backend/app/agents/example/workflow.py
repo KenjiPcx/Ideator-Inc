@@ -191,5 +191,8 @@ class FinancialReportWorkflow(Workflow):
         async for event in handler.stream_events():
             # Don't write the StopEvent from sub task to the stream
             if type(event) is not StopEvent:
+                if type(event) is AgentRunEvent:
+                    print("Found agent run event, modified the workflow name")
+                    event.workflow_name = "Financial Report Workflow"
                 ctx.write_event_to_stream(event)
         return await handler

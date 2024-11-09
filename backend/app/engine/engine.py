@@ -10,7 +10,7 @@ def get_chat_engine(
     session_id: str,
     chat_history: Optional[List[ChatMessage]] = None, 
     email: Optional[str] = None, 
-    mode: str = "not test", 
+    mode: str = "test", 
     **kwargs
 ) -> Workflow:
     if mode == "test":

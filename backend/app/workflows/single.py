@@ -15,7 +15,7 @@ from llama_index.core.workflow import (
     Workflow,
     step,
 )
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class InputEvent(Event):
@@ -27,16 +27,9 @@ class ToolCallEvent(Event):
 
 
 class AgentRunEvent(Event):
-    name: str
-    _msg: str
-
-    @property
-    def msg(self):
-        return self._msg
-
-    @msg.setter
-    def msg(self, value):
-        self._msg = value
+    workflow_name: str = Field(default="")
+    name: str = Field(default="")
+    msg: str = Field(default="")            
 
 
 class AgentRunResult(BaseModel):

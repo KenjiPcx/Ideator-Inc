@@ -1,27 +1,29 @@
 import Image from "next/image";
 
-export default function Header() {
+interface HeaderProps {
+  setUserEmail: (email: string) => void;
+}
+
+export default function Header({ setUserEmail }: HeaderProps) {
   return (
-    <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-      <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-        Get started by editing&nbsp;
-        <code className="font-mono font-bold">app/page.tsx</code>
-      </p>
-      <div className="fixed bottom-0 left-0 mb-4 flex h-auto w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:w-auto lg:bg-none lg:mb-0">
-        <a
-          href="https://www.llamaindex.ai/"
-          className="flex items-center justify-center font-nunito text-lg font-bold gap-2"
-        >
-          <span>Built by LlamaIndex</span>
-          <Image
-            className="rounded-xl"
-            src="/llama.png"
-            alt="Llama Logo"
-            width={40}
-            height={40}
-            priority
-          />
-        </a>
+    <div className="flex justify-between items-center">
+      <h1 className="text-4xl font-bold text-white">
+        Ideator Inc
+        <span className="text-blue-400 ml-2 text-lg font-normal">
+          AI-Powered Startup Research Lab
+        </span>
+      </h1>
+      
+      <div className="relative group">
+        <input
+          type="email"
+          placeholder="Enter your email"
+          className="px-4 py-2 rounded bg-gray-700 text-white w-64"
+          onChange={(e) => setUserEmail(e.target.value)}
+        />
+        <div className="absolute hidden group-hover:block right-0 top-full mt-2 p-2 bg-gray-800 text-white text-sm rounded-lg w-64">
+          Leave your email and you will be sent the artifacts when done
+        </div>
       </div>
     </div>
   );

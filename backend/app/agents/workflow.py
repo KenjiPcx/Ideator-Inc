@@ -120,6 +120,13 @@ class FinancialReportWorkflow(Workflow):
     ) -> AnalyzeEvent:
         result: AgentRunResult = await self.run_agent(ctx, researcher, ev.input)
         content = result.response.message.content
+        ctx.write_event_to_stream(
+            AgentRunEvent(
+                name=researcher.name,
+                msg=f"Completed research: {content}",
+                workflow_name="Financial Report Workflow",
+            )       
+        )
         return AnalyzeEvent(
             input=dedent(
                 f"""
@@ -136,6 +143,13 @@ class FinancialReportWorkflow(Workflow):
     ) -> ReportEvent | StopEvent:
         result: AgentRunResult = await self.run_agent(ctx, analyst, ev.input)
         content = result.response.message.content
+        ctx.write_event_to_stream(
+            AgentRunEvent(
+                name=analyst.name,
+                msg=f"Completed analysis: {content}",
+                workflow_name="Financial Report Workflow",
+            )       
+        )
         return ReportEvent(
             input=dedent(
                 f"""
@@ -160,7 +174,8 @@ class FinancialReportWorkflow(Workflow):
                 AgentRunEvent(
                     name=reporter.name,
                     msg=f"Error creating a report: {e}",
-                )
+                    workflow_name="Financial Report Workflow",
+                )       
             )
             return StopEvent(result=None)
 
@@ -176,5 +191,9 @@ class FinancialReportWorkflow(Workflow):
         async for event in handler.stream_events():
             # Don't write the StopEvent from sub task to the stream
             if type(event) is not StopEvent:
+                print("Type of event", type(event))
+                if type(event) is AgentRunEvent:
+                    print("Found agent run event, modified the workflow name")
+                    event.workflow_name = "Financial Report Workflow"
                 ctx.write_event_to_stream(event)
         return await handler

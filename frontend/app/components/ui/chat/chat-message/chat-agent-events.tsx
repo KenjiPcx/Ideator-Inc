@@ -64,7 +64,10 @@ function AgentEventContent({
   const { agent, texts } = event;
   const AgentIcon = event.icon;
   return (
-    <div className="flex gap-4 border-b pb-4 items-center fadein-agent">
+    <div
+      className="flex gap-4 border-b pb-4 items-center fadein-agent text-white
+      scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500"
+    >
       <div className="w-[100px] flex flex-col items-center gap-2">
         <div className="relative">
           {isLast && !isFinished && (

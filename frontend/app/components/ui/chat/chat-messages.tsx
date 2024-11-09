@@ -81,10 +81,11 @@ export default function ChatMessages(
 
   return (
     <div
-      className="flex-1 w-full rounded-xl bg-white p-4 shadow-xl relative overflow-y-auto"
+      className="flex-1 w-full rounded-lg bg-gray-800 p-4 relative overflow-y-auto text-white
+      scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500"
       ref={scrollableChatContainerRef}
     >
-      <div className="flex flex-col gap-5 divide-y">
+      <div className="flex flex-col gap-5 divide-y divide-gray-700">
         {props.messages.map((m, i) => {
           const isLoadingMessage = i === messageLength - 1 && props.isLoading;
           return (
@@ -100,7 +101,7 @@ export default function ChatMessages(
         })}
         {isPending && (
           <div className="flex justify-center items-center pt-10">
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-4 w-4 animate-spin text-gray-300" />
           </div>
         )}
       </div>
@@ -124,6 +125,7 @@ export default function ChatMessages(
                 onClick={() =>
                   props.append!({ role: "user", content: question })
                 }
+                className="text-gray-300 hover:text-white border-gray-700 hover:bg-gray-700"
               >
                 {question}
               </Button>
