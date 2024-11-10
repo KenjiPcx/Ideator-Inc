@@ -15,7 +15,7 @@ def create_trend_analyzer(chat_history: List[ChatMessage]):
         )
         
     tools = [
-        # FunctionTool.from_defaults(search, name="search", description="Search the web for any information"),
+        FunctionTool.from_defaults(search, name="search", description="Search the web for any information"),
     ]  
 
     prompt_instructions = dedent("""
@@ -80,6 +80,9 @@ def create_trend_analyzer(chat_history: List[ChatMessage]):
 
         ## Final Checklist and Feedback Interpretation
         Before finalizing, cross-reference each section with any critic feedback, revising examples and data points to ensure clarity and relevance. Add additional research if needed to strengthen sections based on feedback or missing evidence.
+        
+        ### Output
+        You must output the full complete report in markdown format
     """)
     
     configured_tools = ToolFactory.from_env(map_result=True)

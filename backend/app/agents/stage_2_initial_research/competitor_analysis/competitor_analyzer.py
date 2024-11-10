@@ -15,7 +15,7 @@ def create_competitor_analyzer(chat_history: List[ChatMessage]):
         )
         
     tools = [
-        # FunctionTool.from_defaults(search, name="search", description="Search the web for any information"),
+        FunctionTool.from_defaults(search, name="search", description="Search the web for any information"),
     ]  
 
     prompt_instructions = dedent("""
@@ -62,7 +62,8 @@ def create_competitor_analyzer(chat_history: List[ChatMessage]):
         - Support each point with specific examples and data
         - Avoid assumptions or unsupported claims
         
-        Conclude with specific, actionable recommendations based on your findings, each supported by competitor examples or market data.
+        ### Output
+        You must output the full complete report in markdown format
     """)
     
     configured_tools = ToolFactory.from_env(map_result=True)

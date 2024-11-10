@@ -188,7 +188,7 @@ class OnlineTrendsWorkflow(Workflow):
         
         for result in results:
             # Store results
-            ctx.data.setdefault("search_results", []).append(result.response.message.content)
+            ctx.data.setdefault("domain_search_results", []).append(result.response.message.content)
         
         # Track completed searches
         ctx.data["num_completed"] = ctx.data.get("num_completed", 0) + 1
@@ -314,6 +314,8 @@ class OnlineTrendsWorkflow(Workflow):
             )
             
             # Save all research data
+            web_search_results = '\n'.join(ctx.data.get('web_search_results', []))
+            domain_search_results = '\n'.join(ctx.data.get('domain_search_results', []))
             write_file(
                 content=dedent(f"""
                     # Online Trends Analysis
@@ -322,8 +324,11 @@ class OnlineTrendsWorkflow(Workflow):
                     {ctx.data["task"]}
                     
                     ### Research Results
-                    General Search Results:
-                    {ctx.data.get('search_results', [])}
+                    #### General Search Results:
+                    {web_search_results}
+                    
+                    #### Domain Search Results:
+                    {domain_search_results}
                     
                     ### Final Report
                     {ctx.data["trend_analysis_result"]}

@@ -1,0 +1,608 @@
+[
+    {
+        "groupName": "Pet Lovers",
+        "subreddits": [
+            "r/dogbreed",
+            "r/DogBreeds101",
+            "r/Dogowners",
+            "r/DogTrainingTips",
+            "r/doggrooming",
+            "r/lookatmydog",
+            "r/reptiles",
+            "r/germanshepherds",
+            "r/Pets",
+            "r/CatAdvice",
+            "r/cat",
+            "r/Ornithology",
+            "r/puppy101",
+            "r/DOG",
+            "r/birding",
+            "r/BeardedDragons",
+            "r/RATS",
+            "r/dogswithjobs",
+            "r/dogpictures",
+            "r/parrots",
+            "r/Aquariums",
+            "r/Dogtraining",
+            "r/dogs",
+            "r/cats",
+            "r/PetAdvice",
+            "r/cockatiel",
+            "r/turtle",
+            "r/leopardgeckos",
+            "r/ballpython",
+            "r/herpetology",
+            "r/DogAdvice"
+        ]
+    },
+    {
+        "groupName": "Software Developers",
+        "subreddits": [
+            "r/Development",
+            "r/coolgithubprojects",
+            "r/softwaredevelopment",
+            "r/SoftwareEngineering",
+            "r/csharp",
+            "r/rust",
+            "r/devops",
+            "r/computerscience",
+            "r/reactjs",
+            "r/coding",
+            "r/learnpython",
+            "r/Python",
+            "r/linux",
+            "r/cscareerquestions",
+            "r/AskEngineers",
+            "r/javascript",
+            "r/webdev",
+            "r/learnprogramming",
+            "r/programming",
+            "r/elixir",
+            "r/AskComputerScience",
+            "r/reactnative",
+            "r/iOSProgramming",
+            "r/ExperiencedDevs",
+            "r/software",
+            "r/learnjavascript"
+        ]
+    },
+    {
+        "groupName": "DevOps",
+        "subreddits": [
+            "r/DevOpsSec",
+            "r/ExperiencedDevOps",
+            "r/AWS_cloud",
+            "r/devopsjobs",
+            "r/Cloud",
+            "r/cloudcomputing",
+            "r/sre",
+            "r/computing",
+            "r/Terraform",
+            "r/googlecloud",
+            "r/AZURE",
+            "r/ExperiencedDevs",
+            "r/aws",
+            "r/devops",
+            "r/PlatformEngineers",
+            "r/aws_cdk",
+            "r/platformengineering",
+            "r/DevOpsLinks",
+            "r/Docker_DevOps",
+            "r/AWS_Certified_Experts",
+            "r/azuredevops"
+        ]
+    },
+    {
+        "groupName": "Crypto",
+        "subreddits": [
+            "r/ethfinance",
+            "r/ethdev",
+            "r/defi",
+            "r/CryptoCurrencyTrading",
+            "r/solana",
+            "r/Crypto_Currency_News",
+            "r/CryptoCurrencies",
+            "r/BitcoinBeginners",
+            "r/CryptoMarkets",
+            "r/ethtrader",
+            "r/ethereum",
+            "r/Bitcoin",
+            "r/defi_",
+            "r/CryptoNews",
+            "r/defiblockchain",
+            "r/web3",
+            "r/ethstaker",
+            "r/0xPolygon",
+            "r/Crypto_General"
+        ]
+    },
+    {
+        "groupName": "Marketers",
+        "subreddits": [
+            "r/affiliate_marketing",
+            "r/content_marketing",
+            "r/InstagramMarketing",
+            "r/PPC",
+            "r/advertising",
+            "r/DigitalMarketing",
+            "r/Affiliatemarketing",
+            "r/digital_marketing",
+            "r/SEO",
+            "r/marketing",
+            "r/socialmedia",
+            "r/OnlineMarketing",
+            "r/MarketingResearch",
+            "r/googleads",
+            "r/Emailmarketing",
+            "r/AskMarketing",
+            "r/FacebookAds",
+            "r/bigseo"
+        ]
+    },
+    {
+        "groupName": "Startup Founders",
+        "subreddits": [
+            "r/startup_resources",
+            "r/indiebiz",
+            "r/Entrepreneurs",
+            "r/advancedentrepreneur",
+            "r/SideProject",
+            "r/startups",
+            "r/smallbusiness",
+            "r/business",
+            "r/Entrepreneur",
+            "r/indiehackers",
+            "r/growmybusiness",
+            "r/ycombinator",
+            "r/Entrepreneurship",
+            "r/startup",
+            "r/SaaS",
+            "r/EntrepreneurRideAlong"
+        ]
+    },
+    {
+        "groupName": "Stock Investors",
+        "subreddits": [
+            "r/SecurityAnalysis",
+            "r/options",
+            "r/FinancialCareers",
+            "r/finance",
+            "r/investing",
+            "r/StockMarket",
+            "r/Daytrading",
+            "r/stocks",
+            "r/technicalanalysis",
+            "r/swingtrading",
+            "r/StocksAndTrading",
+            "r/Trading",
+            "r/ValueInvesting",
+            "r/Forex",
+            "r/dividends"
+        ]
+    },
+    {
+        "groupName": "Video Editors",
+        "subreddits": [
+            "r/videomaker",
+            "r/Youtubevideo",
+            "r/buildapcvideoediting",
+            "r/iMovie",
+            "r/editing",
+            "r/finalcutpro",
+            "r/youtubers",
+            "r/NewTubers",
+            "r/postproduction",
+            "r/VideoEditors",
+            "r/editors",
+            "r/premiere",
+            "r/gopro",
+            "r/videography",
+            "r/VideoEditing"
+        ]
+    },
+    {
+        "groupName": "Generative AI",
+        "subreddits": [
+            "r/PromptEngineering",
+            "r/LanguageTechnology",
+            "r/StableDiffusion",
+            "r/weirddalle",
+            "r/GPT3",
+            "r/midjourney",
+            "r/OpenAI",
+            "r/ChatGPT",
+            "r/DreamBooth",
+            "r/starryai",
+            "r/nightcafe",
+            "r/sdforall",
+            "r/deepdream",
+            "r/dalle2",
+            "r/aiArt"
+        ]
+    },
+    {
+        "groupName": "Designers",
+        "subreddits": [
+            "r/uidesign",
+            "r/product_design",
+            "r/UXResearch",
+            "r/web_design",
+            "r/graphic_design",
+            "r/Design",
+            "r/UX_Design",
+            "r/learndesign",
+            "r/userexperience",
+            "r/UXDesign",
+            "r/UI_Design",
+            "r/logodesign",
+            "r/typography"
+        ]
+    },
+    {
+        "groupName": "Data Scientists",
+        "subreddits": [
+            "r/datascientists",
+            "r/bigdata_analytics",
+            "r/dataanalytics",
+            "r/bigdata",
+            "r/dataanalysis",
+            "r/BusinessIntelligence",
+            "r/data",
+            "r/analytics",
+            "r/datasets",
+            "r/dataengineering",
+            "r/statistics",
+            "r/datascience",
+            "r/MachineLearning"
+        ]
+    },
+    {
+        "groupName": "Fitness Enthusiasts",
+        "subreddits": [
+            "r/workout",
+            "r/yoga",
+            "r/loseit",
+            "r/strength_training",
+            "r/Fitness",
+            "r/personaltraining",
+            "r/physicaltherapy",
+            "r/fitness30plus",
+            "r/weightroom",
+            "r/GymMotivation",
+            "r/GYM",
+            "r/Health"
+        ]
+    },
+    {
+        "groupName": "Gaming",
+        "subreddits": [
+            "r/IndieGaming",
+            "r/GamingLeaksAndRumours",
+            "r/pcgaming",
+            "r/gaming",
+            "r/XboxGamers",
+            "r/TwitchStreaming",
+            "r/gamers",
+            "r/GamerPals",
+            "r/macgaming",
+            "r/CozyGamers",
+            "r/linux_gaming"
+        ]
+    },
+    {
+        "groupName": "Gardeners",
+        "subreddits": [
+            "r/flowers",
+            "r/Permaculture",
+            "r/whatsthisplant",
+            "r/gardening",
+            "r/GardenersWorld",
+            "r/UrbanGardening",
+            "r/GardeningUK",
+            "r/SavageGarden",
+            "r/vegetablegardening",
+            "r/succulents",
+            "r/mycology"
+        ]
+    },
+    {
+        "groupName": "Photographers",
+        "subreddits": [
+            "r/Beginning_Photography",
+            "r/postprocessing",
+            "r/AskPhotography",
+            "r/photography",
+            "r/WeddingPhotography",
+            "r/Nikon",
+            "r/canon",
+            "r/AnalogCommunity",
+            "r/SonyAlpha",
+            "r/streetphotography",
+            "r/analog"
+        ]
+    },
+    {
+        "groupName": "NFT Collectors",
+        "subreddits": [
+            "r/opensea",
+            "r/NFTsMarketplace",
+            "r/NFT",
+            "r/DigitalItems",
+            "r/OpenseaMarket",
+            "r/CryptoArt",
+            "r/OpenSeaNFT",
+            "r/NFTMarketplace",
+            "r/NFTmarket",
+            "r/NFTExchange"
+        ]
+    },
+    {
+        "groupName": "Ecommerce",
+        "subreddits": [
+            "r/ecommerce_growth",
+            "r/Random_Acts_of_Etsy",
+            "r/AmazonSeller",
+            "r/ecommercemarketing",
+            "r/reviewmyshopify",
+            "r/EtsySellers",
+            "r/Etsy",
+            "r/shopify",
+            "r/dropship",
+            "r/ecommerce"
+        ]
+    },
+    {
+        "groupName": "SEOs",
+        "subreddits": [
+            "r/SEO_Talk",
+            "r/bigseo",
+            "r/SEO",
+            "r/The_SEO",
+            "r/GoogleSearchConsole",
+            "r/Local_SEO",
+            "r/SEO_cases",
+            "r/seogrowth",
+            "r/TechSEO",
+            "r/SEO_Digital_Marketing"
+        ]
+    },
+    {
+        "groupName": "Self-Promoters",
+        "subreddits": [
+            "r/IMadeThis",
+            "r/AppIdeas",
+            "r/SideProject",
+            "r/TestMyApp",
+            "r/betatests",
+            "r/ProductHunters",
+            "r/alphaandbetausers",
+            "r/selfpromotion",
+            "r/youtubepromotion"
+        ]
+    },
+    {
+        "groupName": "Parents",
+        "subreddits": [
+            "r/raisingkids",
+            "r/Parenting",
+            "r/Parents",
+            "r/parentsofmultiples",
+            "r/NewParents",
+            "r/toddlers",
+            "r/beyondthebump",
+            "r/SingleParents",
+            "r/daddit"
+        ]
+    },
+    {
+        "groupName": "No-code",
+        "subreddits": [
+            "r/nocodedevelopers",
+            "r/lowcode",
+            "r/NoCodeSaaS",
+            "r/nocode",
+            "r/Adalo",
+            "r/NoCodeMovement",
+            "r/nocodelowcode",
+            "r/Airtable",
+            "r/webflow"
+        ]
+    },
+    {
+        "groupName": "Cold Email",
+        "subreddits": [
+            "r/OutreachHacks",
+            "r/B2BSaaS",
+            "r/copywriting",
+            "r/EmailOutreach",
+            "r/coldemail",
+            "r/b2b_sales",
+            "r/LeadGeneration",
+            "r/Emailmarketing",
+            "r/sales"
+        ]
+    },
+    {
+        "groupName": "Financial Independence",
+        "subreddits": [
+            "r/FIREUK",
+            "r/financialindependence",
+            "r/Frugal",
+            "r/personalfinance",
+            "r/fatFIRE",
+            "r/Fire",
+            "r/FinancialPlanning",
+            "r/UKPersonalFinance"
+        ]
+    },
+    {
+        "groupName": "3D Printers",
+        "subreddits": [
+            "r/3dprinter",
+            "r/3Dprintmything",
+            "r/functionalprint",
+            "r/FixMyPrint",
+            "r/ender3",
+            "r/3Dmodeling",
+            "r/blender",
+            "r/3Dprinting"
+        ]
+    },
+    {
+        "groupName": "Freelancers",
+        "subreddits": [
+            "r/Upwork",
+            "r/freelanceWriters",
+            "r/freelance",
+            "r/WorkOnline",
+            "r/Freelancers",
+            "r/freelance_forhire",
+            "r/Fiverr",
+            "r/forhire"
+        ]
+    },
+    {
+        "groupName": "Copywriters",
+        "subreddits": [
+            "r/ContentHacks",
+            "r/Write2Publish",
+            "r/freelanceWriters",
+            "r/copywriting",
+            "r/writers",
+            "r/content_marketing",
+            "r/KeepWriting",
+            "r/SEO"
+        ]
+    },
+    {
+        "groupName": "Notion Users",
+        "subreddits": [
+            "r/Notion",
+            "r/NotionPromote",
+            "r/BestNotionTemplates",
+            "r/AskNotion",
+            "r/NotionGeeks",
+            "r/FreeNotionTemplates",
+            "r/notioncreations",
+            "r/Notiontemplates"
+        ]
+    },
+    {
+        "groupName": "English Learners",
+        "subreddits": [
+            "r/EnglishStudy",
+            "r/LearnEnglishFree",
+            "r/Learn_English",
+            "r/learnEnglishOnline",
+            "r/LearnEnglishOnReddit",
+            "r/language_exchange",
+            "r/EnglishLearning",
+            "r/languagelearning"
+        ]
+    },
+    {
+        "groupName": "Influencers",
+        "subreddits": [
+            "r/SocialMediaMarketing",
+            "r/InstagramGrowthTips",
+            "r/influencermarketing",
+            "r/InstagramMarketing",
+            "r/Instagram",
+            "r/socialmedia",
+            "r/BeautyGuruChatter"
+        ]
+    },
+    {
+        "groupName": "AirBnB Hosts",
+        "subreddits": [
+            "r/learnairbnb",
+            "r/ShortTermRentals",
+            "r/AirBnBInvesting",
+            "r/rentalproperties",
+            "r/AirBnBHosts",
+            "r/airbnb_hosts"
+        ]
+    },
+    {
+        "groupName": "Advertisers",
+        "subreddits": [
+            "r/googleads",
+            "r/FacebookAds",
+            "r/PPC",
+            "r/advertising",
+            "r/SEO",
+            "r/marketing"
+        ]
+    },
+    {
+        "groupName": "Remote Workers",
+        "subreddits": [
+            "r/workfromhome",
+            "r/work",
+            "r/remotework",
+            "r/WorkOnline",
+            "r/digitalnomad",
+            "r/RemoteJobs"
+        ]
+    },
+    {
+        "groupName": "Productivity",
+        "subreddits": [
+            "r/LifeHack_Pro",
+            "r/lifehack",
+            "r/getdisciplined",
+            "r/productivity",
+            "r/lifehacks",
+            "r/LifeProTips"
+        ]
+    },
+    {
+        "groupName": "Product Managers",
+        "subreddits": [
+            "r/Product_Management",
+            "r/ProductManager",
+            "r/ProductOwner",
+            "r/prodmgmt",
+            "r/ProductMgmt",
+            "r/ProductManagement"
+        ]
+    },
+    {
+        "groupName": "SaaS founders",
+        "subreddits": [
+            "r/B2BSaaS",
+            "r/SaaS_Email_Marketing",
+            "r/NoCodeSaaS",
+            "r/SaaSSales",
+            "r/microsaas",
+            "r/SaaS"
+        ]
+    },
+    {
+        "groupName": "B2B Sales",
+        "subreddits": [
+            "r/B_2_B_Selling_Tips",
+            "r/B2BSales",
+            "r/b2b_sales",
+            "r/salestechniques",
+            "r/sales"
+        ]
+    },
+    {
+        "groupName": "Restaurant Owners",
+        "subreddits": [
+            "r/restaurateur",
+            "r/restaurant",
+            "r/BarOwners",
+            "r/restaurantowners"
+        ]
+    },
+    {
+        "groupName": "Newsletter Creators",
+        "subreddits": [
+            "r/Newsletters",
+            "r/Substack",
+            "r/Emailmarketing"
+        ]
+    }
+]

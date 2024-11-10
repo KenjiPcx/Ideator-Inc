@@ -17,7 +17,6 @@ import asyncio
 from llama_index.core.chat_engine.types import AgentChatResponse
 from llama_index.core.prompts.base import PromptTemplate
 from app.settings import Settings
-from pydantic import ValidationError
 
 class ExecuteSearchEvent(Event):
     query: str
@@ -381,6 +380,8 @@ class CompetitorAnalysisWorkflow(Workflow):
             )
             
             # Save all agent responses and sources so we can use them for RAG chat later
+            initial_search_results = '\n'.join(ctx.data.get('initial_search_results', []))
+            refined_search_results = '\n'.join(ctx.data.get('refined_search_results', []))
             write_file(
                 content=dedent(f"""
                     # Competitor analysis activity
@@ -394,11 +395,11 @@ class CompetitorAnalysisWorkflow(Workflow):
                     
                     ### Initial research
                     We reranked and deduplicated the competitors based on their relevance to the task, and did more research on them. Here are their details:
-                    {ctx.data["initial_search_results"]}
+                    {initial_search_results}
                     
                     ### Refined research
                     For more promising competitors, we did more research and here are their details:
-                    {ctx.data["refined_search_results"]}
+                    {refined_search_results}
                     
                     ### Report
                     Then we synthesized the information and created this report:

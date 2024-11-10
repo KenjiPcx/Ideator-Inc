@@ -54,6 +54,8 @@ def create_trend_critic(chat_history: List[ChatMessage]):
         1. Whether you are satisfied with the report (boolean)
         2. A detailed critique identifying specific gaps, unsupported claims, or missing data
         3. Actionable recommendations, with each criticism paired with a concrete improvement suggestion
+        
+        If no report is provided, ask for it.
 
         Example Output:
         {
