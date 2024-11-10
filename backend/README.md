@@ -46,6 +46,19 @@ The API allows CORS for all origins to simplify development. You can change this
 ENVIRONMENT=prod poetry run python main.py
 ```
 
+## Current Agents in Production
+
+This is the main workflow that orchestrates the entire research process: [Ideator Inc Workflow](./app/agents/ideator_inc_workflow.py)
+- Team 1
+    - Competitor Analysis Workflow: [Competitor Analysis Workflow](./app/agents/stage_2_initial_research/competitor_analysis/workflow.py)
+    - Market Research Workflow: [Market Research Workflow](./app/agents/stage_2_initial_research/market_research/workflow.py)
+    - Online Trends Workflow: [Online Trends Workflow](./app/agents/stage_2_initial_research/online_trends/workflow.py)
+    - Customer Insights Workflow: [Customer Insights Workflow](./app/agents/stage_2_initial_research/customer_insights/workflow.py)
+- Team 2
+    - Executive Summary Workflow: [Executive Summary Workflow](./app/agents/stage_6_output_production/executive_summarizer/workflow.py)
+    - Podcast Generation Workflow: [Podcast Generation Workflow](./app/agents/stage_6_output_production/podcaster/workflow.py)
+- All other workflows are not developed yet.
+
 ## Learn More
 
 To learn more about LlamaIndex, take a look at the following resources:

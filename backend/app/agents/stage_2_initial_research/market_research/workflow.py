@@ -347,8 +347,8 @@ def create_market_research_workflow(
 ):
     workflow = MarketResearchWorkflow(
         session_id=session_id,
-        timeout=timeout,
         chat_history=chat_history,
+        timeout=timeout,
         num_queries=num_queries,
         max_critic_iterations=max_critic_iterations,
     )
