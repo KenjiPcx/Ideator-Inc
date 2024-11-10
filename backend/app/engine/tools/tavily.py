@@ -46,7 +46,6 @@ def tavily_search(
 
 def tavily_qna_search(
     query: str,
-    api_key: Optional[str] = None,
 ):
     """
     Use this function to get quick answers to questions using Tavily's API.

@@ -30,7 +30,7 @@ class ToolCallEvent(Event):
 class AgentRunEvent(Event):
     workflow_name: str = Field(default="")
     name: str = Field(default="")
-    msg: str = Field(default="")            
+    msg: str | None = Field(default=None)            
 
 
 class AgentRunResult(BaseModel):
@@ -64,6 +64,7 @@ class FunctionCallingAgent(Workflow):
         name: str,
         write_events: bool = True,
         description: str | None = None,
+        use_name_as_workflow_name: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(*args, verbose=verbose, timeout=timeout, **kwargs)
@@ -71,7 +72,7 @@ class FunctionCallingAgent(Workflow):
         self.name = name
         self.write_events = write_events
         self.description = description
-
+        self.use_name_as_workflow_name = use_name_as_workflow_name
         if llm is None:
             llm = Settings.llm.model_copy()
         self.llm = llm
@@ -121,7 +122,7 @@ class FunctionCallingAgent(Workflow):
         )
         self.memory.put(response.message)
         ctx.write_event_to_stream(
-            AgentRunEvent(name=self.name, msg="Got response: " + str(response.message))
+            AgentRunEvent(name=self.name, msg="Got response: " + str(response.message), workflow_name=self.name if self.use_name_as_workflow_name else None)
         )
 
         tool_calls = self.llm.get_tool_calls_from_response(
@@ -130,14 +131,14 @@ class FunctionCallingAgent(Workflow):
 
         if not tool_calls:
             ctx.write_event_to_stream(
-                AgentRunEvent(name=self.name, msg="Finished task")
+                AgentRunEvent(name=self.name, msg="Finished task", workflow_name=self.name if self.use_name_as_workflow_name else None)
                 )
             return StopEvent(
                 result=AgentRunResult(response=response, sources=[*self.sources])
             )
         else:
             ctx.write_event_to_stream(
-                AgentRunEvent(name=self.name, msg="Calling tools: " + str(tool_calls))
+                AgentRunEvent(name=self.name, msg="Calling tools: " + str(tool_calls), workflow_name=self.name if self.use_name_as_workflow_name else None)
                 )
             return ToolCallEvent(tool_calls=tool_calls)
 
@@ -184,13 +185,13 @@ class FunctionCallingAgent(Workflow):
             full_response = await generator.__anext__()
             tool_calls = self.llm.get_tool_calls_from_response(full_response)
             ctx.write_event_to_stream(
-                AgentRunEvent(name=self.name, msg="Calling tools: " + str(tool_calls))
+                AgentRunEvent(name=self.name, msg="Calling tools: " + str(tool_calls), workflow_name=self.name if self.use_name_as_workflow_name else None)
             )
             return ToolCallEvent(tool_calls=tool_calls)
 
         # If we've reached here, it's not an immediate tool call, so we return the generator
         ctx.write_event_to_stream(
-            AgentRunEvent(name=self.name, msg="Finished task")
+            AgentRunEvent(name=self.name, msg="Finished task", workflow_name=self.name if self.use_name_as_workflow_name else None)
         )
         return StopEvent(result=generator)
 
@@ -217,12 +218,12 @@ class FunctionCallingAgent(Workflow):
                     )
                 )
                 ctx.write_event_to_stream(
-                    AgentRunEvent(name=self.name, msg="Tool does not exist: " + str(tool_call.tool_name))
+                    AgentRunEvent(name=self.name, msg="Tool does not exist: " + str(tool_call.tool_name), workflow_name=self.name if self.use_name_as_workflow_name else None)
                 )
                 continue
 
             ctx.write_event_to_stream(
-                AgentRunEvent(name=self.name, msg="Calling tool: " + str(tool_call.tool_name))
+                AgentRunEvent(name=self.name, msg="Calling tool: " + str(tool_call.tool_name), workflow_name=self.name if self.use_name_as_workflow_name else None)
             )
             try:
                 if isinstance(tool, ContextAwareTool):
@@ -240,7 +241,7 @@ class FunctionCallingAgent(Workflow):
                 )
             except Exception as e:
                 ctx.write_event_to_stream(
-                    AgentRunEvent(name=self.name, msg="Encountered error in tool call: " + str(e))
+                    AgentRunEvent(name=self.name, msg="Encountered error in tool call: " + str(e), workflow_name=self.name if self.use_name_as_workflow_name else None)
                 )
                 tool_msgs.append(
                     ChatMessage(
@@ -253,7 +254,7 @@ class FunctionCallingAgent(Workflow):
         for msg in tool_msgs:
             self.memory.put(msg)
             ctx.write_event_to_stream(
-                AgentRunEvent(name=self.name, msg="Tool response: " + str(msg))
+                AgentRunEvent(name=self.name, msg="Tool response: " + str(msg), workflow_name=self.name if self.use_name_as_workflow_name else None)
             )
             
         chat_history = self.memory.get()

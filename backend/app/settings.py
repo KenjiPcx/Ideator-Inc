@@ -83,14 +83,16 @@ def init_nvidia_nim():
     
     max_tokens = os.getenv("LLM_MAX_TOKENS")
     Settings.llm = NVIDIA(
-        model=os.getenv("MODEL", "meta/llama-3.1-70b-instruct"),
+        model="meta/llama-3.1-70b-instruct",
+        # model=os.getenv("MODEL", "meta/llama-3.1-70b-instruct"),
         temperature=float(os.getenv("LLM_TEMPERATURE", DEFAULT_TEMPERATURE)),
         max_tokens=int(max_tokens) if max_tokens is not None else None,
         api_key=os.getenv("NVIDIA_NIM_API_KEY"),
     )
     
     Settings.embed_model = NVIDIAEmbedding(
-        model=os.getenv("EMBEDDING_MODEL", "nvidia/nv-embedqa-mistral-7b-v2"),
+        model="nvidia/nv-embedqa-mistral-7b-v2",    
+        # model=os.getenv("EMBEDDING_MODEL", "nvidia/nv-embedqa-mistral-7b-v2"),
         dimensions=int(os.getenv("EMBEDDING_DIM", DEFAULT_EMBEDDING_DIM)),
         api_key=os.getenv("NVIDIA_NIM_API_KEY"),
     )

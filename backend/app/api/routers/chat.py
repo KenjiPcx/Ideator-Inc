@@ -5,7 +5,7 @@ from app.api.routers.models import (
 )
 from app.api.routers.vercel_response import VercelStreamResponse
 from app.engine.engine import get_chat_engine
-from app.agents.stage_6_output_production.researcher import ResearchQAAgent
+from app.agents.stage_6_output_production.qna_researcher.researcher import ResearchQAAgent
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, status
 
 chat_router = r = APIRouter()
@@ -46,8 +46,8 @@ async def chat(
             detail=f"Error in chat engine: {e}",
         ) from e
 
-@r.post("/qa")
-async def research_qa(
+@r.post("/qna")
+async def research_qna(
     request: Request,
     data: ChatData,
 ):
