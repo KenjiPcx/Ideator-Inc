@@ -395,11 +395,11 @@ class CompetitorAnalysisWorkflow(Workflow):
                     
                     ### Initial research
                     We reranked and deduplicated the competitors based on their relevance to the task, and did more research on them. Here are their details:
-                    {initial_search_results}
+                    {'\n'.join(ctx.data["initial_search_results"])}
                     
                     ### Refined research
                     For more promising competitors, we did more research and here are their details:
-                    {refined_search_results}
+                    {'\n'.join(ctx.data["refined_search_results"])}
                     
                     ### Report
                     Then we synthesized the information and created this report:

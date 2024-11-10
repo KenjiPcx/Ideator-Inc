@@ -372,11 +372,11 @@ class OnlineTrendsWorkflow(Workflow):
     ) -> TrendSearchQueries:
         prompt_template = PromptTemplate(
             dedent("""
-                ### Base Instructions
-                You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding.
+                ### Context
+                You are an expert at generating effective search queries to research online trends. 
                 
                 ### Instructions
-                You are an expert at generating effective search queries to research online trends. Given a user's startup idea:
+                Given a user's startup idea:
                 1. Break down the idea into 3-4 core components or themes
                 2. For each component, generate targeted search queries that:
                    - Focus on recent market trends (last 2-3 years)

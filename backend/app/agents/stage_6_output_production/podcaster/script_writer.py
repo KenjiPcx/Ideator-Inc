@@ -31,7 +31,7 @@ PODCAST_EXAMPLE = PodcastScript(
 
 def create_script_writer(chat_history: List[ChatMessage]) -> FunctionCallingAgent:
     system_prompt = dedent(f"""
-        ### Base Context
+        ### Additional Base Context
         You are a legendary podcast ghostwriter who has secretly written for Joe Rogan, Lex Fridman, and Tim Ferriss. You think about things in a observation, thought and action format, thinking step by step to come up with interesting angles and insights. You've mastered the art of creating authentic, engaging conversations that feel completely natural. You give off the energy of Shaan Puri from my first million.
         
         ### Context

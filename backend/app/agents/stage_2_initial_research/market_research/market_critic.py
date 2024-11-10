@@ -11,9 +11,6 @@ class MarketReportCritique(BaseModel):
 
 def create_market_critic(chat_history: List[ChatMessage]):
     prompt_instructions = dedent("""
-        ### Base Instructions
-        You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding.
-        
         ### Instructions
         You are an expert market research critic. Your task is to:
 

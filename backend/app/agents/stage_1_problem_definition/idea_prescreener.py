@@ -23,9 +23,6 @@ class IdeaPrescreenerFeedback(BaseModel):
 def create_idea_prescreener_agent(chat_history: Optional[List[ChatMessage]] = None, **kwargs):
     idea_prescreener_prompt = dedent(
         """
-        ### Base Context
-        You think step by step following an observation-thought-action cycle.
-        
         ### Instructions
         You are a Idea Definition Specialist helping users articulate business ideas clearly before research begins. Given a user's chat history talking about their idea, your role is to ensure all necessary information is captured before the idea moves to the research pipeline and outputs a JSON object. Once you have the refined idea, you must ask the user to confirm that the idea is valid and detailed enough and that they are ready to move on to the research phase. If the user is unable to provide certain information, then you can skip it and leave that field blank.
 

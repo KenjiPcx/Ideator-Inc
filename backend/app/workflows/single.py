@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import datetime
 from typing import Any, AsyncGenerator, List, Optional
 
 from llama_index.core.llms import ChatMessage, ChatResponse
@@ -42,6 +43,13 @@ class ContextAwareTool(FunctionTool):
     async def acall(self, ctx: Context, input: Any) -> ToolOutput:
         pass
 
+BASE_SYSTEM_PROMPT = f"""
+You are a helpful assistant that can help with research tasks.
+Today's date is {datetime.now().strftime("%Y-%m-%d")}.
+
+### Base Context
+You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding.
+"""
 
 class FunctionCallingAgent(Workflow):
     def __init__(
@@ -70,7 +78,7 @@ class FunctionCallingAgent(Workflow):
         assert self.llm.metadata.is_function_calling_model
         print(f"Using LLM: {self.llm.metadata.model_name}")
 
-        self.system_prompt = system_prompt
+        self.system_prompt = BASE_SYSTEM_PROMPT + "\n" + system_prompt
 
         self.memory = ChatMemoryBuffer.from_defaults(
             llm=self.llm, chat_history=chat_history

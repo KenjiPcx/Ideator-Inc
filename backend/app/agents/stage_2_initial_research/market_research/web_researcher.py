@@ -29,11 +29,11 @@ def create_market_researcher(name_prefix: str, chat_history: List[ChatMessage], 
     ]
 
     prompt_instructions = dedent("""
-        ### Base Instructions
-        You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding.
+        ### Context
+        You are an expert market researcher at finding and analyzing market research data. 
         
         ### Instructions
-        You are an expert at finding and analyzing market research data. Your task is to:
+        Your task is to:
         1. Search for relevant market data using the provided query, use it as a starting point for your research
         2. Read and analyze promising pages
         3. Extract any relevant high quality data that would be useful for a market analysis report, in full details, here are some examples:
