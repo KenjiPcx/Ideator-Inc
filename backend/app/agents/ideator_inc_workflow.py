@@ -4,7 +4,7 @@ from typing import AsyncGenerator, List, Optional
 from app.agents.stage_2_initial_research import create_competitor_analysis
 from app.agents.stage_6_output_production import create_podcast_workflow
 
-from app.workflows.single import AgentRunResult
+from app.workflows.single import AgentRunEvent, AgentRunResult
 from llama_index.core.chat_engine.types import ChatMessage
 from llama_index.core.workflow import (
     Context,
@@ -82,12 +82,15 @@ class IdeatorIncWorkflow(Workflow):
         workflow: Workflow,
         input: str,
         streaming: bool = False,
+        workflow_name: str = ""
     ) -> AgentRunResult | AsyncGenerator:
         handler = workflow.run(input=input, streaming=streaming)
         # bubble all events while running the executor to the planner
         async for event in handler.stream_events():
             # Don't write the StopEvent from sub task to the stream
             if type(event) is not StopEvent:
+                if isinstance(event, AgentRunEvent):
+                    event.workflow_id = workflow_name
                 ctx.write_event_to_stream(event)
         return await handler
     

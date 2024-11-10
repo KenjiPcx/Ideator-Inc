@@ -194,6 +194,8 @@ class PodcastWorkflow(Workflow):
             handler = agent.run(input=input, streaming=False)
             async for event in handler.stream_events():
                 if type(event) is not StopEvent:
+                    if isinstance(event, AgentRunEvent):
+                        event.workflow_id = "Podcaster"
                     ctx.write_event_to_stream(event)
             return await handler
         except Exception as e:
@@ -209,7 +211,7 @@ def create_podcast_workflow(session_id: str, chat_history: List[ChatMessage], **
     workflow = PodcastWorkflow(
         session_id=session_id,
         chat_history=chat_history,
-        timeout=600
+        timeout=1000
     )
     
     outline_writer = create_outline_writer(chat_history)
