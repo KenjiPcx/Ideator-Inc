@@ -35,7 +35,7 @@ def create_competitor_searcher(chat_history: List[ChatMessage]):
         You are an expert competitor analyst. Your goal is to identify and analyze direct competitors to a product idea - companies or products that are solving the same problem in a similar way.
 
         Follow these steps:
-        1. You are given a search query, use it to find competitors using the `curated_competitor_search` tool for a curated search and the `search` tool for a general search for competitors. You must use both tools, you don't need to modify the query, just use it as is.
+        1. You are given a search query, use it to find competitors using the `curated_competitor_search` tool for a curated search and the `search` tool for a general search for competitors. You must use both tools, you don't need to modify the query, just use it as is. For competitors, you should consider if they are competitors or complementary products, it could be that both apps are solving the same problem but when used together they are more powerful, and therefore they are not direct competitors.
 
         2. After calling both tools, analyze the search results to identify competitors and extract interesting insights, you can read the page content using the `read_webpage` tool:
            - Prioritize relevant competitors that are solving the same problem in a similar way

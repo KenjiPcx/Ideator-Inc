@@ -122,7 +122,7 @@ class FunctionCallingAgent(Workflow):
         )
         self.memory.put(response.message)
         ctx.write_event_to_stream(
-            AgentRunEvent(name=self.name, msg="Got response: " + str(response.message), workflow_name=self.name if self.use_name_as_workflow_name else None)
+            AgentRunEvent(name=self.name, msg="Got response: \n" + str(response.message), workflow_name=self.name if self.use_name_as_workflow_name else None)
         )
 
         tool_calls = self.llm.get_tool_calls_from_response(

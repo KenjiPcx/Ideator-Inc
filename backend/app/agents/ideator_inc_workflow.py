@@ -283,17 +283,33 @@ class IdeatorIncWorkflow(Workflow):
         streaming: bool = False,
         workflow_name: str = ""
     ) -> AgentRunResult | AsyncGenerator:
-        handler = workflow.run(input=input, streaming=streaming)
-        # bubble all events while running the executor to the planner
-        async for event in handler.stream_events():
-            # Don't write the StopEvent from sub task to the stream
-            if type(event) is not StopEvent:
-                if isinstance(event, AgentRunEvent):
-                    event.workflow_name = workflow_name
-                ctx.write_event_to_stream(event)
-        return await handler
+        try:
+            handler = workflow.run(input=input, streaming=streaming)
+            # bubble all events while running the executor to the planner
+            async for event in handler.stream_events():
+                # Don't write the StopEvent from sub task to the stream
+                if type(event) is not StopEvent:
+                    if isinstance(event, AgentRunEvent):
+                        event.workflow_name = workflow_name
+                    ctx.write_event_to_stream(event)
+            return await handler
+        except Exception as e:
+            error_message = f"Error in {workflow_name}: {str(e)}"
+            ctx.write_event_to_stream(
+                AgentRunEvent(
+                    name="Ideator Inc Workflow",
+                    msg=error_message,
+                    workflow_name=workflow_name
+                )
+            )
+            # Return a failed result object
+            return AgentRunResult(
+                response=ChatMessage(
+                    content=f"Failed to complete {workflow_name} due to an error: {str(e)}"
+                )
+            )
     
-def create_idea_research_workflow(session_id: str, chat_history: Optional[List[ChatMessage]] = None, email: Optional[str] = None):
+def create_idea_research_workflow(session_id: str, chat_history: Optional[List[ChatMessage]] = None, email: Optional[str] = None, **kwargs):
     # Initial Research Team
     timeout = 750
     competitor_researcher = create_competitor_analysis_workflow(

@@ -12,7 +12,7 @@ logger = logging.getLogger("uvicorn")
 
 
 class WebReaderResult(BaseModel):
-    content: str  
+    content: str | None = None
     url: str
     is_error: bool
     error_message: Optional[str] = None
