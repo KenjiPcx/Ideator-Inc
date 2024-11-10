@@ -62,7 +62,7 @@ class CompetitorAnalysisWorkflow(Workflow):
                  chat_history: Optional[List[ChatMessage]] = None,
                  num_searches: int = 2,
                  num_competitors: int = 4,
-                 timeout: int = 360,
+                 timeout: int = 1000,
                  max_critic_iterations: int = 3):
         super().__init__(timeout=timeout)
         self.session_id = session_id
@@ -395,11 +395,11 @@ class CompetitorAnalysisWorkflow(Workflow):
                     
                     ### Initial research
                     We reranked and deduplicated the competitors based on their relevance to the task, and did more research on them. Here are their details:
-                    {'\n'.join(ctx.data["initial_search_results"])}
+                    {initial_search_results}
                     
                     ### Refined research
                     For more promising competitors, we did more research and here are their details:
-                    {'\n'.join(ctx.data["refined_search_results"])}
+                    {refined_search_results}
                     
                     ### Report
                     Then we synthesized the information and created this report:
@@ -549,7 +549,7 @@ class CompetitorAnalysisWorkflow(Workflow):
         return res
 
 
-def create_competitor_analysis(session_id: str, chat_history: List[ChatMessage], email: str | None = None, **kwargs):
+def create_competitor_analysis_workflow(session_id: str, chat_history: List[ChatMessage], email: str | None = None, **kwargs):
     workflow = CompetitorAnalysisWorkflow(
         session_id=session_id,
         timeout=600,

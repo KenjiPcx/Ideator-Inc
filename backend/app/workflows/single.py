@@ -1,5 +1,5 @@
 from abc import abstractmethod
-import datetime
+from datetime import datetime
 from typing import Any, AsyncGenerator, List, Optional
 
 from llama_index.core.llms import ChatMessage, ChatResponse
