@@ -7,6 +7,8 @@ from llama_index.core.settings import Settings
 def init_settings():
     model_provider = os.getenv("MODEL_PROVIDER")
     match model_provider:
+        case "nvidia":
+            init_nvidia_nim()
         case "openai":
             init_openai()
         case "groq":
@@ -75,16 +77,21 @@ def init_openai():
     )
     
 def init_nvidia_nim():
-    from llama_index.core.constants import DEFAULT_TEMPERATURE
+    from llama_index.core.constants import DEFAULT_TEMPERATURE, DEFAULT_EMBEDDING_DIM
     from llama_index.llms.nvidia import NVIDIA
+    from llama_index.embeddings.nvidia import NVIDIAEmbedding
     
     max_tokens = os.getenv("LLM_MAX_TOKENS")
     Settings.llm = NVIDIA(
-        # model=os.getenv("MODEL", "meta/llama-3.1-70b-instruct"),
-        # model="nvidia/llama-3.1-nemotron-70b-instruct",
-        model="meta/llama-3.1-70b-instruct",
+        model=os.getenv("MODEL", "meta/llama-3.1-70b-instruct"),
         temperature=float(os.getenv("LLM_TEMPERATURE", DEFAULT_TEMPERATURE)),
         max_tokens=int(max_tokens) if max_tokens is not None else None,
+        api_key=os.getenv("NVIDIA_NIM_API_KEY"),
+    )
+    
+    Settings.embed_model = NVIDIAEmbedding(
+        model=os.getenv("EMBEDDING_MODEL", "nvidia/nv-embedqa-mistral-7b-v2"),
+        dimensions=int(os.getenv("EMBEDDING_DIM", DEFAULT_EMBEDDING_DIM)),
         api_key=os.getenv("NVIDIA_NIM_API_KEY"),
     )
 
