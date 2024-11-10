@@ -47,7 +47,7 @@ def create_critic(chat_history: List[ChatMessage]) -> FunctionCallingAgent:
     """)
 
     return FunctionCallingAgent(
-        name="critic",
+        name="Executive Summary Critic",
         system_prompt=system_prompt,
         description="Expert at critiquing executive summary reports",
         tools=[],

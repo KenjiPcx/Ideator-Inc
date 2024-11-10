@@ -35,7 +35,7 @@ class PodcastWorkflow(Workflow):
     def __init__(self, 
                  session_id: str,
                  chat_history: Optional[List[ChatMessage]] = None,
-                 timeout: int = 360,
+                 timeout: int = 1800,
                  max_iterations: int = 3):
         super().__init__(timeout=timeout)
         self.chat_history = chat_history or []
@@ -183,7 +183,7 @@ class PodcastWorkflow(Workflow):
                 )
             )
             
-            return StopEvent(result=output_path)
+            return StopEvent(result=f"Podcast generated at: {output_path}")
 
         except Exception as e:
             logger.error(f"Error generating audio: {str(e)}")
@@ -207,11 +207,11 @@ class PodcastWorkflow(Workflow):
             )
             raise
 
-def create_podcast_workflow(session_id: str, chat_history: List[ChatMessage], **kwargs):
+def create_podcast_workflow(session_id: str, chat_history: List[ChatMessage], timeout: int = 1800):
     workflow = PodcastWorkflow(
         session_id=session_id,
         chat_history=chat_history,
-        timeout=1000
+        timeout=timeout
     )
     
     outline_writer = create_outline_writer(chat_history)

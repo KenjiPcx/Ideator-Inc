@@ -39,7 +39,7 @@ def create_analyst(chat_history: List[ChatMessage]):
     tools, prompt_instructions, description = _get_analyst_params()
 
     return FunctionCallingAgent(
-        name="analyst",
+        name="Analyst",
         tools=tools,
         description=description,
         system_prompt=dedent(prompt_instructions),

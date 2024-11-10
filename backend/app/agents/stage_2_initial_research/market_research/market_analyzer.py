@@ -72,7 +72,7 @@ def create_market_analyzer(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="market_analyzer",
+        name="Market Analyzer",
         description="Expert at analyzing market research data",
         system_prompt=prompt_instructions,
         tools=tools,

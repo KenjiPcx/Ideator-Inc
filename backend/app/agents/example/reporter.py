@@ -42,7 +42,7 @@ def _get_reporter_params(
 def create_reporter(chat_history: List[ChatMessage], session_id: str, email: str | None = None):
     tools, description, prompt_instructions = _get_reporter_params(chat_history, session_id, email)
     return FunctionCallingAgent(
-        name="reporter",
+        name="Reporter",
         tools=tools,
         description=description,
         system_prompt=prompt_instructions,

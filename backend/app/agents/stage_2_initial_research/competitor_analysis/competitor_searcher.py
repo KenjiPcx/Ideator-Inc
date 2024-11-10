@@ -74,7 +74,7 @@ def create_competitor_searcher(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="competitor_searcher",
+        name="Competitor Searcher",
         tools=tools,
         system_prompt=prompt_instructions,
         description="Expert at finding competing products and companies",

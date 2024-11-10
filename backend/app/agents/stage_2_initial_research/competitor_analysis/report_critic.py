@@ -56,7 +56,7 @@ def create_report_critic(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="competitor_report_critic",
+        name="Competitor Report Critic",
         tools=tools,
         description="Expert at critiquing competitive analysis reports and providing improvement suggestions",
         system_prompt=prompt_instructions,

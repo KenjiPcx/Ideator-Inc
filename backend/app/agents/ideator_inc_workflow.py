@@ -1,3 +1,4 @@
+from textwrap import dedent
 from typing import AsyncGenerator, List, Optional
 
 # Import our agent team
@@ -14,14 +15,29 @@ from llama_index.core.workflow import (
     Workflow,
     step,
 )
+from app.settings import Settings
+from llama_index.core.prompts import PromptTemplate
 
-class StartResearchEvent(Event):
+class StartCompetitorAnalysisResearchEvent(Event):
+    input: str
+
+class StartCustomerInsightsResearchEvent(Event):
+    input: str
+
+class StartOnlineTrendsResearchEvent(Event):
+    input: str
+
+class StartMarketResearchEvent(Event):
     input: str
 
 class CombineResearchResultsEvent(Event):
     input: str
+    input: str
     
-class CreatePostProductionEvent(Event):
+class CreatePodcastEvent(Event):
+    input: str
+
+class CreateExecutiveSummaryEvent(Event):
     input: str
 
 class CombinePostProductionResultsEvent(Event):
@@ -46,24 +62,29 @@ class IdeatorIncWorkflow(Workflow):
         self.post_production_team_size = post_production_team_size
         
     @step()
-    async def start(self, ctx: Context, ev: StartEvent) -> StartResearchEvent:
-        ctx.data["task"] = ev.input
+    async def start(self, ctx: Context, ev: StartEvent) -> StartCompetitorAnalysisResearchEvent | StartCustomerInsightsResearchEvent | StartOnlineTrendsResearchEvent | StartMarketResearchEvent:
+        ctx.data["idea"] = ev.input
         
         ctx.write_event_to_stream(
             AgentRunEvent(
                 name="Ideator Inc Workflow",
-                msg=f"Starting research on task: {ev.input}",
+                msg=f"Starting research on idea: {ev.input}",
                 workflow_name="Research Manager"
             )
         )
         
-        return StartResearchEvent(input=ev.input)
+        ctx.send_event(StartCompetitorAnalysisResearchEvent(input=ev.input))
+        ctx.send_event(StartCustomerInsightsResearchEvent(input=ev.input))  
+        ctx.send_event(StartOnlineTrendsResearchEvent(input=ev.input))
+        ctx.send_event(StartMarketResearchEvent(input=ev.input))
+        
+        return None
     
     ### Initial Research Analysts Team 1 ###
     @step()
-    async def competitor_research(self, ctx: Context, ev: StartResearchEvent, competitor_researcher: Workflow) -> CombineResearchResultsEvent:
+    async def competitor_research(self, ctx: Context, ev: StartCompetitorAnalysisResearchEvent, competitor_researcher: Workflow) -> CombineResearchResultsEvent:
         prompt = f"Conduct a competitor analysis session based on the following idea: {ev.input}"
-        res = await self.run_sub_workflow(ctx, competitor_researcher, prompt)
+        res = await self.run_sub_workflow(ctx, competitor_researcher, prompt, workflow_name="Competitor Analysis Analyst")
         
         ctx.write_event_to_stream(
             AgentRunEvent(
@@ -73,11 +94,12 @@ class IdeatorIncWorkflow(Workflow):
             )
         )
         
+        ctx.data["competitor_research_result"] = res.response.message.content
         ctx.data["research_completed"] = ctx.data.get("research_completed", 0) + 1
         return CombineResearchResultsEvent(input=res.response.message.content)
     
     @step()
-    async def customer_insights(self, ctx: Context, ev: CombineResearchResultsEvent, customer_insights_researcher: Workflow) -> CombineResearchResultsEvent:
+    async def customer_insights(self, ctx: Context, ev: StartCustomerInsightsResearchEvent, customer_insights_researcher: Workflow) -> CombineResearchResultsEvent:
         prompt = f"Conduct a customer insights session based on the following idea: {ev.input}"
         res = await self.run_sub_workflow(ctx, customer_insights_researcher, prompt, workflow_name="Customer Insights Analyst")
         
@@ -89,11 +111,12 @@ class IdeatorIncWorkflow(Workflow):
             )
         )
         
+        ctx.data["customer_insights_result"] = res.response.message.content
         ctx.data["research_completed"] = ctx.data.get("research_completed", 0) + 1
         return CombineResearchResultsEvent(input=res.response.message.content)
     
     @step()
-    async def online_trends(self, ctx: Context, ev: CombineResearchResultsEvent, online_trends_researcher: Workflow) -> CombineResearchResultsEvent:
+    async def online_trends(self, ctx: Context, ev: StartOnlineTrendsResearchEvent, online_trends_researcher: Workflow) -> CombineResearchResultsEvent:
         prompt = f"Conduct a online trends research session based on the following idea: {ev.input}"
         res = await self.run_sub_workflow(ctx, online_trends_researcher, prompt, workflow_name="Online Trends Analyst")
         
@@ -105,12 +128,12 @@ class IdeatorIncWorkflow(Workflow):
             )
         )
         
+        ctx.data["online_trends_result"] = res.response.message.content
         ctx.data["research_completed"] = ctx.data.get("research_completed", 0) + 1
-        
         return CombineResearchResultsEvent(input=res.response.message.content)
     
     @step()
-    async def market_research(self, ctx: Context, ev: CombineResearchResultsEvent, market_research_researcher: Workflow) -> CombineResearchResultsEvent:
+    async def market_research(self, ctx: Context, ev: StartMarketResearchEvent, market_research_researcher: Workflow) -> CombineResearchResultsEvent:
         prompt = f"Conduct a market research session based on the following idea: {ev.input}"
         res = await self.run_sub_workflow(ctx, market_research_researcher, prompt, workflow_name="Market Research Analyst")
         
@@ -122,11 +145,12 @@ class IdeatorIncWorkflow(Workflow):
             )
         )
         
+        ctx.data["market_research_result"] = res.response.message.content
         ctx.data["research_completed"] = ctx.data.get("research_completed", 0) + 1
         return CombineResearchResultsEvent(input=res.response.message.content)
 
     @step()
-    async def combine_research_results(self, ctx: Context, ev: CombineResearchResultsEvent) -> CreatePostProductionEvent:
+    async def combine_research_results(self, ctx: Context, ev: CombineResearchResultsEvent) -> CreatePodcastEvent | CreateExecutiveSummaryEvent:
     
         # Wait for all research to be completed before combining
         research_completed = ctx.data.get("research_completed", 0)
@@ -147,11 +171,13 @@ class IdeatorIncWorkflow(Workflow):
                 workflow_name="Research Manager"
             )
         )
-        return CreatePostProductionEvent(input=ev.input)
+        ctx.send_event(CreatePodcastEvent(input=ev.input))
+        ctx.send_event(CreateExecutiveSummaryEvent(input=ev.input))
+        return None
 
     ### Output Production ###
     @step()
-    async def podcast_generation(self, ctx: Context, ev: CreatePostProductionEvent, podcast_generator: Workflow) -> CombinePostProductionResultsEvent:
+    async def podcast_generation(self, ctx: Context, ev: CreatePodcastEvent, podcast_generator: Workflow) -> CombinePostProductionResultsEvent:
         res = await self.run_sub_workflow(ctx, podcast_generator, ev.input, workflow_name="Podcaster")
         
         ctx.write_event_to_stream(
@@ -161,12 +187,13 @@ class IdeatorIncWorkflow(Workflow):
                 workflow_name="Research Manager"
             )
         )
-        ctx.data["podcast_res"] = res.response.message.content
+        
+        ctx.data["podcast_result"] = res
         ctx.data["post_production_completed"] = ctx.data.get("post_production_completed", 0) + 1
-        return CombinePostProductionResultsEvent(input=res.response.message.content)
+        return CombinePostProductionResultsEvent(input=res)
     
     @step()
-    async def executive_summary_generation(self, ctx: Context, ev: CombinePostProductionResultsEvent, executive_summarizer: Workflow) -> CombinePostProductionResultsEvent:
+    async def executive_summary_generation(self, ctx: Context, ev: CreateExecutiveSummaryEvent, executive_summarizer: Workflow) -> CombinePostProductionResultsEvent:
         res = await self.run_sub_workflow(ctx, executive_summarizer, ev.input, workflow_name="Executive Summarizer")
         
         ctx.write_event_to_stream(
@@ -176,7 +203,8 @@ class IdeatorIncWorkflow(Workflow):
                 workflow_name="Research Manager"
             )
         )
-        ctx.data["executive_summary_res"] = res.response.message.content
+        
+        ctx.data["executive_summary_result"] = res.response.message.content
         ctx.data["post_production_completed"] = ctx.data.get("post_production_completed", 0) + 1
         return CombinePostProductionResultsEvent(input=res.response.message.content)
     
@@ -201,8 +229,51 @@ class IdeatorIncWorkflow(Workflow):
             )
         )
         
-        final_output = f"{ctx.data.get('podcast_res', ev.input)} \n\n {ctx.data.get('executive_summary_res', ev.input)}"
-        return StopEvent(result=final_output)
+        responses = f"""
+        Market Research Result: 
+        {ctx.data.get('market_research_result', "None")}
+        Customer Insights Result: 
+        {ctx.data.get('customer_insights_result', "None")}
+        Online Trends Result: 
+        {ctx.data.get('online_trends_result', "None")}
+        Competitor Analysis Result: 
+        {ctx.data.get('competitor_research_result', "None")}
+        Podcast Result: 
+        {ctx.data.get('podcast_result', "None")}
+        Executive Summary Result: 
+        {ctx.data.get('executive_summary_result', "None")}
+        """
+
+        prompt = PromptTemplate(
+            dedent("""
+                ### Instructions
+                Summarize the research results into a concise message, except for the URLs.
+                And create a clean, readable message that lists all the URLs mentioned in the research results.
+                Format it as a simple list with clear labels for each URL.
+                
+                ### Research Results
+                {responses}
+
+                ### Output Format
+                Here are your research results:
+                <Summarized message>
+
+                Here are the artifacts generated from the research:
+                Market Research: [URL]
+                Customer Insights: [URL]
+                Online Trends Analysis: [URL]
+                Competitor Analysis: [URL]
+                Podcast: [URL]
+                Executive Summary: [URL]
+                
+                ### Output Message
+            """)
+        )
+        
+        formatted_prompt = prompt.format(responses=responses)
+        clean_output = await Settings.llm.acomplete(formatted_prompt)
+        
+        return StopEvent(result=clean_output)
     
     async def run_sub_workflow(
         self,
@@ -222,18 +293,56 @@ class IdeatorIncWorkflow(Workflow):
                 ctx.write_event_to_stream(event)
         return await handler
     
-def create_idea_research_workflow(session_id: str, chat_history: Optional[List[ChatMessage]] = None, email: Optional[str] = None, **kwargs):
+def create_idea_research_workflow(session_id: str, chat_history: Optional[List[ChatMessage]] = None, email: Optional[str] = None):
     # Initial Research Team
-    competitor_researcher = create_competitor_analysis_workflow(session_id=session_id, chat_history=chat_history, email=email, **kwargs)
-    customer_insights_researcher = create_customer_insights_workflow(session_id=session_id, chat_history=chat_history, email=email, **kwargs)
-    online_trends_researcher = create_online_trends_workflow(session_id=session_id, chat_history=chat_history, email=email, **kwargs)
-    market_research_researcher = create_market_research_workflow(session_id=session_id, chat_history=chat_history, email=email, **kwargs)
+    timeout = 750
+    competitor_researcher = create_competitor_analysis_workflow(
+        session_id=session_id, 
+        chat_history=chat_history, 
+        email=email, 
+        num_queries=3, 
+        max_critic_iterations=3, 
+        timeout=timeout
+    )
+    customer_insights_researcher = create_customer_insights_workflow(
+        session_id=session_id, 
+        chat_history=chat_history, 
+        email=email, 
+        num_queries=3, 
+        max_critic_iterations=3, 
+        timeout=timeout
+    )
+    online_trends_researcher = create_online_trends_workflow(
+        session_id=session_id, 
+        chat_history=chat_history, 
+        email=email, 
+        num_queries=3, 
+        max_critic_iterations=3, 
+        timeout=timeout
+    )
+    market_research_researcher = create_market_research_workflow(
+        session_id=session_id, 
+        chat_history=chat_history, 
+        email=email, 
+        num_queries=3, 
+        max_critic_iterations=3, 
+        timeout=timeout
+    )
     
     # Final Output
-    podcast_generator = create_podcast_workflow(session_id=session_id, chat_history=chat_history, **kwargs)
-    executive_summarizer = create_executive_summary_workflow(session_id=session_id, chat_history=chat_history, email=email, **kwargs)
+    podcast_generator = create_podcast_workflow(
+        session_id=session_id, 
+        chat_history=chat_history, 
+        timeout=1800
+    )
+    executive_summarizer = create_executive_summary_workflow(
+        session_id=session_id, 
+        chat_history=chat_history, 
+        email=email,
+        timeout=1800
+    )
 
-    workflow = IdeatorIncWorkflow(session_id=session_id, timeout=2000, chat_history=chat_history)
+    workflow = IdeatorIncWorkflow(session_id=session_id, timeout=3600, chat_history=chat_history)
 
     workflow.add_workflows(
         competitor_researcher=competitor_researcher,

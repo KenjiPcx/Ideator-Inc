@@ -68,7 +68,7 @@ def create_trend_critic(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="trend_report_critic",
+        name="Trend Report Critic",
         tools=tools,
         description="Expert at critiquing trend analysis reports and providing improvement suggestions",
         system_prompt=prompt_instructions,

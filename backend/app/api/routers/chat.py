@@ -5,7 +5,7 @@ from app.api.routers.models import (
 )
 from app.api.routers.vercel_response import VercelStreamResponse
 from app.engine.engine import get_chat_engine
-from app.agents.stage_6_output_production.qna_researcher.researcher import ResearchQAAgent
+from app.agents.stage_6_output_production import create_researcher
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, status
 
 chat_router = r = APIRouter()
@@ -30,7 +30,7 @@ async def chat(
         params = data.data or {}
         logger.info(f"Email: {data.email}")
         logger.info(f"Session ID: {data.sessionId}")
-        engine = get_chat_engine(session_id=data.sessionId, chat_history=messages, email=data.email, params=params)
+        engine = get_chat_engine(session_id=data.sessionId, chat_history=messages, email=data.email, params=params, mode="prod")
 
         event_handler = engine.run(input=last_message_content, streaming=True)
         return VercelStreamResponse(
@@ -52,7 +52,7 @@ async def research_qna(
     data: ChatData,
 ):
     try:
-        agent = ResearchQAAgent(data.sessionId).create_agent()
+        agent = create_researcher(session_id=data.sessionId, chat_history=data.get_history_messages(include_agent_messages=True), email=data.email)
         
         event_handler = agent.run(
             input=data.get_last_message_content(),

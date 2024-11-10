@@ -12,7 +12,7 @@ logger = logging.getLogger("uvicorn")
 
 
 class WebReaderResult(BaseModel):
-    content: Union[Dict[str, Any], List[Any]]  
+    content: str  
     url: str
     is_error: bool
     error_message: Optional[str] = None
@@ -22,9 +22,9 @@ class DefaultSchema(BaseModel):
 
 async def read_webpage(
     url: str,
-    instruction: str = "Extract the main content of the page, do not summarize the content, include all important details including statistics, quotes, examples, stories, etc",
+    # instruction: str = "Extract the main content of the page, do not summarize the content, include all important details including statistics, quotes, examples, stories, etc",
     provider: str = "openai/gpt-4o-mini",
-    schema: Dict = DefaultSchema.model_json_schema(),
+    # schema: Dict | None = None,
     openai_api_key: Optional[str] = None,
 ) -> WebReaderResult:
     """
@@ -45,21 +45,13 @@ async def read_webpage(
         async with AsyncWebCrawler(verbose=True) as crawler:
             result = await crawler.arun(
                 url=url,
+                remove_overlay_elements=True,
                 magic=True,
-                extraction_strategy=LLMExtractionStrategy(
-                    provider=provider,
-                    api_token=api_key,
-                    instruction=instruction,
-                    extraction_type="schema",
-                    schema=schema
-                ),
                 bypass_cache=True,
             )
         
-        extracted_content = json.loads(result.extracted_content)
-        
         return WebReaderResult(
-            content=extracted_content,
+            content=result.fit_markdown,
             url=url,
             is_error=False
         )

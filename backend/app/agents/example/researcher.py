@@ -90,7 +90,7 @@ def create_researcher(chat_history: List[ChatMessage], **kwargs):
         raise ValueError("No tools found for researcher agent")
 
     return FunctionCallingAgent(
-        name="researcher",
+        name="Researcher",
         tools=tools,
         description="expert in retrieving any unknown content from the corpus",
         system_prompt=dedent(

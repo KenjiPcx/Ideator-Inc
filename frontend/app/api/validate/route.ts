@@ -38,8 +38,7 @@ export async function POST(req: Request) {
 
         Follow these steps:
         1. Repeat back the user's idea from what you understand, call the "update_idea" tool to extract the idea you understood and show it to the user. Then ask follow up questions to gather more information. You must call the "update_idea" tool before asking follow up questions.
-        2. After the user confirms the refinements are accurate, call the "confirm_idea" tool to lock the idea and unlock the research phase, communicate that the idea can't be edited after confirmation
-        3. Call the "start_research" tool to start the research phase, and notify the user that the research team will start working on the idea and end the chat.
+        2. After the user confirms the refinements are accurate, call the "confirm_idea" tool to lock the idea and unlock the research phase, communicate that the idea can't be edited after confirmation, then terminate the conversation.
 
         Note:
         - The user might not be able to provide the information to your questions, and that is okay, the research team will look into that, we still ask the question just in case the user can provide information early on and make the research more accurate

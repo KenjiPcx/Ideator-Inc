@@ -36,7 +36,7 @@ export default function AgentModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg w-[700px] h-[80vh] flex flex-col">
+      <div className="bg-gray-800 rounded-lg w-[55vw] h-[80vh] flex flex-col">
         {/* Header */}
         <div className="px-5 py-3 border-b border-gray-700 flex justify-between items-center shrink-0">
           <div>

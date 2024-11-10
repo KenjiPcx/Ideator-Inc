@@ -343,10 +343,11 @@ def create_market_research_workflow(
     email: str | None = None,
     num_queries: int = 3,
     max_critic_iterations: int = 3,
+    timeout: int = 1800,
 ):
     workflow = MarketResearchWorkflow(
         session_id=session_id,
-        timeout=1000,
+        timeout=timeout,
         chat_history=chat_history,
         num_queries=num_queries,
         max_critic_iterations=max_critic_iterations,

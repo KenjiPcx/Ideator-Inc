@@ -110,7 +110,7 @@ def create_reddit_researcher(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="reddit_researcher",
+        name="Web Researcher (Reddit)",
         tools=tools,
         system_prompt=prompt_instructions,
         description="Expert at finding and analyzing customer insights through Reddit discussions",

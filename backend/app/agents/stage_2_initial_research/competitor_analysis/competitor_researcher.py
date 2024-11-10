@@ -93,6 +93,7 @@ def create_competitor_researcher(chat_history: List[ChatMessage]):
             - If the provided url is from a trusted source (e.g., ProductHunt, YCombinator, official website), use it directly
             - Otherwise, use the `search` tool to search for the product's official website, or ProductHunt page, or YCombinator page
             - Use the scrape_product_details` tool to extract key information
+            - If you are calling the scrape tool more than 2 times, and nothing is getting returned, you should accept defeat and terminate
 
         2. Gather pricing details:
            - Use the `search` tool to search for the product's pricing information
@@ -140,7 +141,7 @@ def create_competitor_researcher(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="competitor_searcher",
+        name="Web Researcher (Competitor)",
         tools=tools,
         system_prompt=prompt_instructions,
         chat_history=chat_history,

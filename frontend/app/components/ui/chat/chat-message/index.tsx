@@ -46,7 +46,11 @@ function ChatMessageContent({
   artifactVersion: number | undefined;
 }) {
   const annotations = message.annotations as MessageAnnotation[] | undefined;
-  if (!annotations?.length) return <Markdown content={message.content} />;
+  const content =
+    message.content === ""
+      ? `Tool invoked: ${message.toolInvocations?.map((t) => t.toolName).join(", ") || "..."}`
+      : message.content;
+  if (!annotations?.length) return <Markdown content={content} />;
 
   const imageData = getAnnotationData<ImageData>(
     annotations,

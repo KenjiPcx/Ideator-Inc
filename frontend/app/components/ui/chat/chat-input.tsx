@@ -12,6 +12,7 @@ import { LlamaCloudSelector } from "./widgets/LlamaCloudSelector";
 import { Send, Loader2 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { buttonVariants } from "../button";
+import { useEffect, useRef } from "react";
 
 const ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "csv", "pdf", "txt", "docx"];
 
@@ -41,6 +42,16 @@ export default function ChatInput(
     reset,
     getAnnotations,
   } = useFile();
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      const textarea = textareaRef.current;
+      textarea.style.height = 'inherit';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
+    }
+  }, [props.input]);
 
   // default submit function does not handle including annotations in the message
   // so we need to use append function to submit new message with annotations
@@ -95,10 +106,7 @@ export default function ChatInput(
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     props.handleInputChange(e);
-    // Auto-adjust height
-    const textarea = e.currentTarget;
-    textarea.style.height = 'inherit';
-    textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // Max height of 200px
+    // Auto-adjust height handled by useEffect
   };
 
   return (
@@ -122,6 +130,7 @@ export default function ChatInput(
       )}
       <div className="flex w-full items-end justify-between gap-4">
         <Textarea
+          ref={textareaRef}
           id="chat-input"
           autoFocus
           name="message"
@@ -140,10 +149,10 @@ export default function ChatInput(
             disabled: props.isLoading,
           }}
         />
-        {process.env.NEXT_PUBLIC_USE_LLAMACLOUD === "true" &&
+        {/* {process.env.NEXT_PUBLIC_USE_LLAMACLOUD === "true" &&
           props.setRequestData && (
             <LlamaCloudSelector setRequestData={props.setRequestData} />
-          )}
+          )} */}
         <Button
           type="submit"
           disabled={props.isLoading || !props.input.trim()}

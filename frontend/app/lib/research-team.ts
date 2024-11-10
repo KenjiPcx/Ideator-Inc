@@ -7,31 +7,31 @@ export const RESEARCH_TEAMS: {
   canChat: boolean;
 }[] = [
   {
-    name: "Competitor Analysis",
+    name: "Competitor Analysis Analyst",
     role: "Analyzes market competitors and their strategies",
     avatar: "/avatars/competitor_analyst.png",
     canChat: false,
   },
   {
-    name: "Market Research",
+    name: "Market Research Analyst",
     role: "Studies market size, trends, and opportunities",
     avatar: "/avatars/market_analyst.png",
     canChat: false,
   },
   {
-    name: "Customer Insights",
+    name: "Customer Insights Analyst",
     role: "Analyzes customer needs and behaviors",
     avatar: "/avatars/customer_insight.png",
     canChat: false,
   },
   {
-    name: "Online Trends",
+    name: "Online Trends Analyst",
     role: "Tracks digital trends and online presence",
     avatar: "/avatars/online_trends.png",
     canChat: false,
   },
   {
-    name: "Podcast Creation",
+    name: "Podcaster",
     role: "Creates engaging podcast content",
     avatar: "/avatars/podcaster.png",
     canChat: false,
@@ -42,10 +42,10 @@ export const RESEARCH_TEAMS: {
     avatar: "/avatars/executive_summarizer.png",
     canChat: false,
   },
-  {
-    name: "Financial Report Workflow",
-    role: "Creates a financial report",
-    avatar: "/avatars/financial_report.png",
-    canChat: false,
-  },
+  // {
+  //   name: "Financial Report Workflow",
+  //   role: "Creates a financial report",
+  //   avatar: "/avatars/financial_report.png",
+  //   canChat: false,
+  // },
 ];

@@ -96,5 +96,6 @@ def create_trend_analyzer(chat_history: List[ChatMessage]):
         name="Trend Analyzer",
         description="Expert at analyzing trends in relation to product ideas",
         tools=tools,
+        system_prompt=prompt_instructions,
         chat_history=chat_history,
     ) 

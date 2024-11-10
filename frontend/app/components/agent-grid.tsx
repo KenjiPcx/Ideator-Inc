@@ -7,8 +7,6 @@ export interface AgentGridProps {
   name: keyof typeof stores;
   role: string;
   avatar: string;
-  isActive: boolean;
-  isLocked?: boolean;
   isSelected: boolean;
   isModalOpen?: boolean;
   onClick: () => void;
@@ -20,8 +18,6 @@ export default function AgentGrid({
   name,
   role,
   avatar,
-  isActive,
-  isLocked,
   isSelected,
   isModalOpen = false,
   onClick,
@@ -30,6 +26,13 @@ export default function AgentGrid({
 }: AgentGridProps) {
   const events = stores[name]((state) => state.events);
   const [latestEvent, setLatestEvent] = useState<AgentEventData | null>(null);
+  const testEvent = {
+    agent: "Test Agent",
+    text: "This is a test event",
+  };
+  // Compute active/locked states based on events
+  const isActive = events.length > 0;
+  const isLocked = !canChat && !isActive;
 
   useEffect(() => {
     const store = stores[name];
@@ -98,28 +101,17 @@ export default function AgentGrid({
         }`}
       />
 
-      {/* Messages Preview - only show when selected AND modal is closed */}
-      {isSelected && !isModalOpen && events.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 rounded-lg p-4 z-10 max-h-48 overflow-y-auto">
-          {events.map((event, i) => (
-            <div key={i} className="mb-2 text-sm text-gray-300">
-              <span className="font-bold">{event.agent}: </span>
-              {event.text}
-            </div>
-          ))}
-        </div>
-      )}
-
+      {/* Notification popup - updated positioning */}
       <AnimatePresence>
         {latestEvent && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full mb-2"
+            className="absolute left-[20%] bottom-5"
           >
             <div className="bg-black/80 text-white p-3 rounded-lg shadow-lg max-w-xs">
-              <p className="text-sm">
+              <p className="text-sm line-clamp-2">
                 {latestEvent.agent}: {latestEvent.text}
               </p>
             </div>

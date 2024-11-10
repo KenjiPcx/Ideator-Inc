@@ -70,7 +70,7 @@ def create_domain_researcher(name_prefix: str, chat_history: List[ChatMessage], 
     """)
 
     return FunctionCallingAgent(
-        name=f"{name_prefix}_domain_researcher",
+        name=f"Domain Researcher ({name_prefix})",
         tools=tools,
         system_prompt=prompt_instructions,
         description=f"Expert at analyzing content patterns on {domain}",

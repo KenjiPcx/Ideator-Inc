@@ -43,7 +43,7 @@ def create_outline_writer(chat_history: List[ChatMessage]) -> FunctionCallingAge
     """)
 
     return FunctionCallingAgent(
-        name="outline_writer",
+        name="Outline Writer",
         system_prompt=system_prompt,
         description="Expert at creating executive summary outlines from research data",
         tools=[],

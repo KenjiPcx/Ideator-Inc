@@ -62,7 +62,7 @@ def create_insights_critic(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="insights_critic",
+        name="Insights Critic",
         tools=[],
         system_prompt=prompt_instructions,
         description="Expert at critiquing customer insights analysis",

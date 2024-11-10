@@ -46,7 +46,7 @@ def create_market_critic(chat_history: List[ChatMessage]):
     """)
 
     return FunctionCallingAgent(
-        name="market_critic",
+        name="Market Critic",
         description="Expert at critiquing market research analysis",
         system_prompt=prompt_instructions,
         chat_history=chat_history,

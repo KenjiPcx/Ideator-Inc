@@ -17,6 +17,7 @@ import {
 import { useClientConfig } from "./components/ui/chat/hooks/use-config";
 import { RESEARCH_TEAMS } from "./lib/research-team";
 import { stores } from "./stores/agentStore";
+import HowToUseModal from "./components/how-to-use-modal";
 
 const refinedIdeaTest = {
   name: "Ikigai Navigator",
@@ -37,22 +38,24 @@ const refinedIdeaTest = {
 };
 
 export default function Home() {
-  const [sessionId] = useState<string>(uuidv4());
+  const [sessionId, _] = useState<string>(uuidv4());
   const { backend } = useClientConfig();
   const [requestData, setRequestData] = useState<any>();
   const [userEmail, setUserEmail] = useState<string>("");
-  const [refinedIdea, setRefinedIdea] = useState<RefinedIdea | null>(
-    refinedIdeaTest,
-  );
+  const [refinedIdea, setRefinedIdea] = useState<RefinedIdea | null>(null);
   const [isIdeaValidated, setIsIdeaValidated] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<
     keyof typeof stores | null
   >(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previousAgentEventCount, setPreviousAgentEventCount] = useState(0);
+  const [startedResearching, setStartedResearching] = useState(false);
+  const [canChatWithAssistant, setCanChatWithAssistant] = useState(false);
+  const [showHowToUse, setShowHowToUse] = useState(true);
 
   const {
     messages,
+    setMessages,
     input,
     setInput,
     append,
@@ -61,7 +64,12 @@ export default function Home() {
     isLoading,
   } = useChat({
     id: sessionId,
-    api: isIdeaValidated ? `${backend}/api/chat` : "/api/validate",
+    api: !isIdeaValidated
+      ? "/api/validate"
+      : selectedAgent !== "Research Assistant"
+        ? `${backend}/api/chat`
+        : `${backend}/api/qna`,
+    maxSteps: isIdeaValidated ? 1 : 5,
     headers: {
       "Content-Type": "application/json",
     },
@@ -71,7 +79,6 @@ export default function Home() {
       sessionId: sessionId,
     },
     sendExtraMessageFields: true,
-    maxSteps: isIdeaValidated ? 1 : 3,
     onToolCall: async ({ toolCall }) => {
       const { toolName, args } = toolCall;
       if (toolName === "update_idea") {
@@ -86,6 +93,7 @@ export default function Home() {
         return "Idea confirmed";
       }
       if (toolName === "start_research") {
+        startResearch();
         console.log("started research");
         return "Research started";
       }
@@ -100,25 +108,18 @@ export default function Home() {
   const handleAgentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPreviousAgentEventCount(0);
-    if (messages.length === 0) {
-      window.history.pushState({}, "", `/research/${sessionId}`);
-    }
     handleSubmit(e);
   };
-
-  // useEffect(() => {
-  //   console.log(stores["Idea Validator"].getState().messages);
-  // }, [input]);
-
-  useEffect(() => {
-    setIsIdeaValidated(true);
-    setRefinedIdea(refinedIdea);
-    console.log(sessionId);
-  }, []);
 
   useEffect(() => {
     console.log(messages);
   }, [messages]);
+
+  // useEffect(() => {
+  //   setIsIdeaValidated(true);
+  //   setRefinedIdea(refinedIdea);
+  //   console.log(sessionId);
+  // }, []);
 
   useEffect(() => {
     if (messages.length === 0) return;
@@ -137,7 +138,7 @@ export default function Home() {
       // Distribute each new annotation to the correct store
       newAgentEvents.forEach((event: AgentEventData) => {
         // Find the correct store based on the agent name
-        console.log("Adding event to store", event.workflowName);
+        console.log("Adding event to store", event);
         const store = stores[event.workflowName];
         if (store) {
           store.getState().addEvent(event);
@@ -149,38 +150,55 @@ export default function Home() {
     }
   }, [messages, previousAgentEventCount]);
 
-  const startResearch = () => {
-    setInput(
-      `Start research on the user's idea: \n${JSON.stringify(refinedIdea)}`,
-    );
-    setTimeout(() => {
-      console.log("Starting research successfully");
-      handleSubmit();
-    }, 1000);
-  };
+  useEffect(() => {
+    if (!startedResearching && previousAgentEventCount >= 10) {
+      setStartedResearching(true);
+    }
+  }, [previousAgentEventCount, startedResearching]);
 
   useEffect(() => {
-    // If the number of messages is even, then its the assistant responding
-    if (messages.length > 0 && messages.length % 2 === 0) {
+    if (startedResearching && messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
-      if (lastMessage.annotations) {
-        console.log(lastMessage.annotations);
+      // Check if the last message indicates research completion
+      // You might want to adjust this condition based on your specific needs
+      if (
+        lastMessage.role === "assistant" &&
+        lastMessage.content.includes("research complete")
+      ) {
+        setCanChatWithAssistant(true);
       }
     }
-  }, [messages]);
+  }, [messages, startedResearching]);
+
+  useEffect(() => {
+    if (isIdeaValidated) {
+      setIsModalOpen(false);
+      setSelectedAgent(null);
+    }
+  }, [isIdeaValidated]);
+
+  const startResearch = () => {
+    append({
+      role: "user",
+      content: `Start research on the user's idea: \n${JSON.stringify(refinedIdea)}`,
+    });
+  };
+
+  const setDemoIdea = () => {
+    setRefinedIdea(refinedIdeaTest);
+    setIsIdeaValidated(true);
+  };
 
   return (
     <main className="min-h-screen p-8 bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col">
       <Header setUserEmail={setUserEmail} />
 
-      <Button onClick={startResearch}>Start Research</Button>
       <div className="grid grid-cols-4 gap-8 flex-grow mt-8 rounded-lg">
         {/* Main Agents */}
         <AgentGrid
           name="Research Manager"
           role="Helps refine and validate startup ideas and then starts the research process"
           avatar="/avatars/idea_validator.png"
-          isActive={!isIdeaValidated}
           isSelected={selectedAgent === "Research Manager"}
           isModalOpen={isModalOpen}
           onClick={() => {
@@ -197,17 +215,17 @@ export default function Home() {
 
         <AgentGrid
           name="Research Assistant"
-          role="Answers questions about research findings"
+          role="Answers questions about research findings (Only available when research is complete)"
           avatar="/avatars/product_manager.png"
-          isActive={isIdeaValidated}
-          isLocked={!isIdeaValidated}
           isSelected={selectedAgent === "Research Assistant"}
           onClick={() => {
-            setSelectedAgent("Research Assistant");
-            setIsModalOpen(true);
+            if (canChatWithAssistant) {
+              setSelectedAgent("Research Assistant");
+              setIsModalOpen(true);
+            }
           }}
           position={{ x: 3, y: 0 }}
-          canChat={true}
+          canChat={canChatWithAssistant}
         />
 
         {/* Research Teams */}
@@ -215,8 +233,6 @@ export default function Home() {
           <AgentGrid
             key={team.name}
             {...team}
-            isActive={isIdeaValidated}
-            isLocked={!isIdeaValidated}
             isSelected={selectedAgent === team.name}
             isModalOpen={isModalOpen}
             onClick={() => {
@@ -255,6 +271,48 @@ export default function Home() {
           setRequestData={setRequestData}
         />
       )}
+
+      <div className="fixed bottom-8 right-8 absolute flex flex-col gap-2">
+        {isIdeaValidated && !startedResearching && (
+          <div className="group/research relative">
+            <Button
+              onClick={startResearch}
+              className="rounded-full px-6 py-5 shadow-lg hover:shadow-xl transition-all flex items-center justify-center bg-green-600 hover:bg-green-700 animate-pulse"
+            >
+              Start Research
+            </Button>
+            <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover/research:opacity-100 transition-opacity duration-200">
+              <div className="bg-gray-900 text-white text-sm py-1 px-2 rounded shadow-lg whitespace-nowrap">
+                Begin AI-powered research process
+              </div>
+            </div>
+          </div>
+        )}
+        {!refinedIdea && (
+          <div className="group/demo relative">
+            <Button
+              onClick={setDemoIdea}
+              className={`rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all flex items-center justify-center ${
+                startedResearching
+                  ? "bg-blue-800 hover:bg-blue-900"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+            >
+              Click for Demo Idea
+            </Button>
+            <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover/demo:opacity-100 transition-opacity duration-200">
+              <div className="bg-gray-900 text-white text-sm py-1 px-2 rounded shadow-lg whitespace-nowrap">
+                Start Research Process with Sample Idea
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <HowToUseModal 
+        isOpen={showHowToUse} 
+        onClose={() => setShowHowToUse(false)}
+      />
     </main>
   );
 }

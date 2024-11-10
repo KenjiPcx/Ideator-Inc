@@ -13,6 +13,8 @@ def _create_query_tools(session_id: str) -> List[BaseTool]:
     """Create query tools for the session's research data"""
     current_file = Path(__file__)
     data_dir = current_file.parent.parent.parent.parent.parent / "data" / session_id
+    if not data_dir.exists():
+        data_dir.mkdir(parents=True, exist_ok=True)
     documents = SimpleDirectoryReader(
         str(data_dir)
     ).load_data()
@@ -72,7 +74,9 @@ def _create_query_tools(session_id: str) -> List[BaseTool]:
     return tools
 
 def create_analyzer(chat_history: List[ChatMessage], session_id: str) -> FunctionCallingAgent:
-    tools = _create_query_tools(session_id)
+    # TODO: Find out how to index the documents only when the agent is running
+    # tools = _create_query_tools(session_id)
+    tools = []
     
     system_prompt = dedent("""
         # Context
@@ -169,7 +173,7 @@ def create_analyzer(chat_history: List[ChatMessage], session_id: str) -> Functio
     """)
 
     return FunctionCallingAgent(
-        name="executive_analyzer",
+        name="Executive Summary Analyzer",
         system_prompt=system_prompt,
         description="Expert at analyzing startup ideas using the Sequoia framework",
         tools=tools,

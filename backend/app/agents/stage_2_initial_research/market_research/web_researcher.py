@@ -82,7 +82,7 @@ def create_market_researcher(name_prefix: str, chat_history: List[ChatMessage], 
     """)
 
     return FunctionCallingAgent(
-        name=f"{name_prefix}_web_researcher",
+        name=f"Web Researcher ({name_prefix})",
         tools=tools,
         system_prompt=prompt_instructions,
         description="Expert at finding and analyzing market research data",

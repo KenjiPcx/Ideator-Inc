@@ -28,7 +28,7 @@ class ToolCallEvent(Event):
 
 
 class AgentRunEvent(Event):
-    workflow_name: str = Field(default="")
+    workflow_name: str | None = Field(default=None)
     name: str = Field(default="")
     msg: str | None = Field(default=None)            
 

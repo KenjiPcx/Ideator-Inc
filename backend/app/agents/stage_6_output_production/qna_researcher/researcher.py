@@ -2,6 +2,7 @@ from typing import List
 from textwrap import dedent
 from llama_index.core import VectorStoreIndex, Document, SimpleDirectoryReader
 from llama_index.core.tools import QueryEngineTool, ToolMetadata, FunctionTool
+from llama_index.core.chat_engine.types import ChatMessage
 from app.utils.paths import get_session_data_path
 from app.workflows.single import FunctionCallingAgent
 from app.engine.tools.tavily import tavily_qna_search
@@ -29,7 +30,7 @@ def _create_query_tools(documents: List[Document]) -> List[QueryEngineTool]:
         FunctionTool.from_defaults(tavily_qna_search, description="Ask a question to the web, it returns a detailed answer"),
     ]
 
-def create_researcher(session_id: str) -> FunctionCallingAgent:
+def create_researcher(session_id: str, chat_history: List[ChatMessage], email: str) -> FunctionCallingAgent:
     documents = _load_documents(session_id)
     print(f"Loaded {len(documents)} documents")
     
@@ -54,5 +55,6 @@ def create_researcher(session_id: str) -> FunctionCallingAgent:
         tools=query_tools,
         verbose=True,
         system_prompt=system_prompt,
+        chat_history=chat_history,
         use_name_as_workflow_name=True
     )

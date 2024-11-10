@@ -69,7 +69,7 @@ def create_script_critic(chat_history: List[ChatMessage]) -> FunctionCallingAgen
     """)
 
     return FunctionCallingAgent(
-        name="script_critic",
+        name="Script Critic",
         system_prompt=system_prompt,
         description="Expert at evaluating and improving podcast scripts",
         tools=[],

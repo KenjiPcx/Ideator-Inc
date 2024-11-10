@@ -60,14 +60,14 @@ class CompetitorAnalysisWorkflow(Workflow):
     def __init__(self, 
                  session_id: str,
                  chat_history: Optional[List[ChatMessage]] = None,
-                 num_searches: int = 2,
+                 num_queries: int = 2,
                  num_competitors: int = 4,
-                 timeout: int = 1000,
+                 timeout: int = 1800,
                  max_critic_iterations: int = 3):
         super().__init__(timeout=timeout)
         self.session_id = session_id
         self.chat_history = chat_history or []
-        self.num_searches = num_searches
+        self.num_queries = num_queries
         self.num_competitors = num_competitors
         self.max_critic_iterations = max_critic_iterations
         
@@ -88,14 +88,14 @@ class CompetitorAnalysisWorkflow(Workflow):
         # Generate search queries
         queries = await self._generate_search_queries(ev.input, 
                                                       chat_history=[], 
-                                                      number_of_queries=self.num_searches)
+                                                      number_of_queries=self.num_queries)
         ctx.write_event_to_stream(
             AgentRunEvent(
                 name="Research starter",
                 msg=f"Generated {len(queries)} search queries\n{queries}",
             )
         )
-        for query in queries[:self.num_searches]:
+        for query in queries[:self.num_queries]:
             ctx.send_event(ExecuteSearchEvent(query=query))
             
         return None
@@ -166,17 +166,17 @@ class CompetitorAnalysisWorkflow(Workflow):
         '''
         # If we haven't completed all searches, wait for more
         num_searches_completed = ctx.data.get("num_searches_completed", 0)
-        if num_searches_completed < self.num_searches:
+        if num_searches_completed < self.num_queries:
             ctx.write_event_to_stream(
                 AgentRunEvent(
                     name="Research combiner",
-                    msg=f"Completed {num_searches_completed} out of {self.num_searches} searches",
+                    msg=f"Completed {num_searches_completed} out of {self.num_queries} searches",
                 )
             )
             return None
         
         # Otherwise, we should have collected all competitor details, rerank and deduplicate them
-        ctx.collect_events(ev, [CombineSearchesEvent] * self.num_searches)
+        ctx.collect_events(ev, [CombineSearchesEvent] * self.num_queries)
         ctx.write_event_to_stream(
             AgentRunEvent(
                 name="Research combiner",
@@ -549,11 +549,13 @@ class CompetitorAnalysisWorkflow(Workflow):
         return res
 
 
-def create_competitor_analysis_workflow(session_id: str, chat_history: List[ChatMessage], email: str | None = None, **kwargs):
+def create_competitor_analysis_workflow(session_id: str, chat_history: List[ChatMessage], email: str | None = None, timeout: int = 1800, num_queries: int = 5, max_critic_iterations: int = 3):
     workflow = CompetitorAnalysisWorkflow(
         session_id=session_id,
-        timeout=600,
+        timeout=timeout,
         chat_history=chat_history,
+        num_queries=num_queries,
+        max_critic_iterations=max_critic_iterations,
     )
     
     competitor_analyzer = create_competitor_analyzer(chat_history)

@@ -76,7 +76,7 @@ class OnlineTrendsWorkflow(Workflow):
                 session_id: str,
                 chat_history: Optional[List[ChatMessage]] = None,
                 num_queries: int = 3,
-                timeout: int = 360,
+                timeout: int = 1800,
                 max_critic_iterations: int = 3):
         super().__init__(timeout=timeout)
         self.session_id = session_id
@@ -434,10 +434,11 @@ def create_online_trends_workflow(
     email: str | None = None,
     num_queries: int = 3,
     max_critic_iterations: int = 3,
+    timeout: int = 1800,
 ):
     workflow = OnlineTrendsWorkflow(
         session_id=session_id,
-        timeout=1000,
+        timeout=timeout,
         chat_history=chat_history,
         num_queries=num_queries,
         max_critic_iterations=max_critic_iterations,

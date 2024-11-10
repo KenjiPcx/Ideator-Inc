@@ -33,7 +33,7 @@ class ExecutiveSummaryWorkflow(Workflow):
                  session_id: str,
                  chat_history: Optional[List[ChatMessage]] = None,
                  email: Optional[str] = None,
-                 timeout: int = 360,
+                 timeout: int = 1800,
                  max_iterations: int = 3):
         super().__init__(timeout=timeout)
         self.chat_history = chat_history or []
@@ -221,12 +221,12 @@ class ExecutiveSummaryWorkflow(Workflow):
             )
             raise
 
-def create_executive_summary_workflow(session_id: str, chat_history: List[ChatMessage], email: Optional[str] = None):
+def create_executive_summary_workflow(session_id: str, chat_history: List[ChatMessage], email: Optional[str] = None, timeout: int = 1800):
     workflow = ExecutiveSummaryWorkflow(
         session_id=session_id,
         chat_history=chat_history,
         email=email,
-        timeout=1000,
+        timeout=timeout,
         max_iterations=3
     )
     
