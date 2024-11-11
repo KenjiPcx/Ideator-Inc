@@ -51,7 +51,7 @@ async def read_webpage(
             )
         
         return WebReaderResult(
-            content=result.fit_markdown,
+            content=result.markdown,
             url=url,
             is_error=False
         )
@@ -60,7 +60,7 @@ async def read_webpage(
         error_message = f"Error reading webpage: {str(e)}"
         logger.error(error_message)
         return WebReaderResult(
-            content={},
+            content="Error reading webpage",
             url=url,
             is_error=True,
             error_message=error_message

@@ -244,36 +244,36 @@ class IdeatorIncWorkflow(Workflow):
         {ctx.data.get('executive_summary_result', "None")}
         """
 
-        prompt = PromptTemplate(
-            dedent("""
-                ### Instructions
-                Summarize the research results into a concise message, except for the URLs.
-                And create a clean, readable message that lists all the URLs mentioned in the research results.
-                Format it as a simple list with clear labels for each URL.
+        # prompt = PromptTemplate(
+        #     dedent("""
+        #         ### Instructions
+        #         Summarize the research results into a concise message, except for the URLs.
+        #         And create a clean, readable message that lists all the URLs mentioned in the research results.
+        #         Format it as a simple list with clear labels for each URL.
                 
-                ### Research Results
-                {responses}
+        #         ### Research Results
+        #         {responses}
 
-                ### Output Format
-                Here are your research results:
-                <Summarized message>
+        #         ### Output Format
+        #         Here are your research results:
+        #         <Summarized message>
 
-                Here are the artifacts generated from the research:
-                Market Research: [URL]
-                Customer Insights: [URL]
-                Online Trends Analysis: [URL]
-                Competitor Analysis: [URL]
-                Podcast: [URL]
-                Executive Summary: [URL]
+        #         Here are the artifacts generated from the research:
+        #         Market Research: [URL]
+        #         Customer Insights: [URL]
+        #         Online Trends Analysis: [URL]
+        #         Competitor Analysis: [URL]
+        #         Podcast: [URL]
+        #         Executive Summary: [URL]
                 
-                ### Output Message
-            """)
-        )
+        #         ### Output Message
+        #     """)
+        # )
         
-        formatted_prompt = prompt.format(responses=responses)
-        clean_output = await Settings.llm.acomplete(formatted_prompt)
+        # formatted_prompt = prompt.format(responses=responses)
+        # clean_output = await Settings.llm.acomplete(formatted_prompt)
         
-        return StopEvent(result=clean_output)
+        return StopEvent(result=responses)
     
     async def run_sub_workflow(
         self,
@@ -314,7 +314,7 @@ class IdeatorIncWorkflow(Workflow):
     
 def create_idea_research_workflow(session_id: str, chat_history: Optional[List[ChatMessage]] = None, email: Optional[str] = None, **kwargs):
     # Initial Research Team
-    timeout = 750
+    timeout = 1000
     competitor_researcher = create_competitor_analysis_workflow(
         session_id=session_id, 
         chat_history=chat_history, 
