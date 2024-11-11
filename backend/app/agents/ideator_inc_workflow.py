@@ -204,9 +204,9 @@ class IdeatorIncWorkflow(Workflow):
             )
         )
         
-        ctx.data["executive_summary_result"] = res.response.message.content
+        ctx.data["executive_summary_result"] = res
         ctx.data["post_production_completed"] = ctx.data.get("post_production_completed", 0) + 1
-        return CombinePostProductionResultsEvent(input=res.response.message.content)
+        return CombinePostProductionResultsEvent(input=res)
     
     @step()
     async def combine_post_production_results(self, ctx: Context, ev: CombinePostProductionResultsEvent) -> StopEvent:
