@@ -70,8 +70,8 @@ def get_tools(**kwargs):
     return [FunctionTool.from_defaults(
         async_fn=lambda url, instruction, schema, provider="openai/gpt-4o-mini": read_webpage(
             url=url,
-            instruction=instruction,
-            schema=schema,
+            # instruction=instruction,
+            # schema=schema,
             provider=provider,
             openai_api_key=kwargs.get('openai_api_key')
         ),
