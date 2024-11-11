@@ -8,6 +8,12 @@ Ideator Inc is an autonomous AI research agency that helps indie hackers validat
 
 The research workflow is inspired by modern marketing methodologies popularized by Greg Isenberg, leveraging community platforms like Reddit to gather authentic market research and customer insights.
 
+## Demo
+
+Hear my pitch on the demo:
+
+![Ideator Inc Demo](https://www.loom.com/share/4553e9b98ba143d3bc6895f286039703?sid=ff3ee1f0-181c-496a-8a0d-9f769cf2e5f6)
+
 ## How It Works
 
 1. Share your startup idea with the Research Manager
@@ -26,6 +32,10 @@ This project introduces innovative UX patterns for multi-agent systems:
 - **Interactive Office Environment**: Experience a mock office setup where you can interact with different AI agents
 - **Post-Research Interactions**: Chat with agents after their tasks are complete to dive deeper into their findings
 
+## Output Quality
+
+I have shared some examples of the output quality in the demo video. Judge for yourself.
+
 ## Technical Stack (NVIDIA LlamaIndex Hack)
 
 This project leverages cutting-edge AI models and frameworks:
@@ -34,6 +44,8 @@ This project leverages cutting-edge AI models and frameworks:
 - **Embeddings**: NVIDIA NeMo Retriever (nvidia/nv-embedqa-mistral-7b-v2)
 - **Framework**: NIM for efficient model deployment
 - **Attempted**: NVIDIA NeMo Guardrails for structured output (deprecated due to version conflicts)
+
+My NVIDIA account got rate limited, so you will have to unfortunately switch to a different model provider to get this running.
 
 ## Getting Started
 
