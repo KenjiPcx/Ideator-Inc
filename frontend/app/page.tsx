@@ -151,12 +151,6 @@ export default function Home() {
   }, [messages, previousAgentEventCount]);
 
   useEffect(() => {
-    if (!startedResearching && previousAgentEventCount >= 10) {
-      setStartedResearching(true);
-    }
-  }, [previousAgentEventCount, startedResearching]);
-
-  useEffect(() => {
     if (startedResearching && messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
       // Check if the last message indicates research completion
@@ -182,6 +176,8 @@ export default function Home() {
       role: "user",
       content: `Start research on the user's idea: \n${JSON.stringify(refinedIdea)}`,
     });
+    setStartedResearching(true);
+    alert("Research started");
   };
 
   const setDemoIdea = () => {
