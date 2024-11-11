@@ -6,7 +6,7 @@ from app.agents.stage_2_initial_research import create_competitor_analysis_workf
 from app.agents.stage_6_output_production import create_podcast_workflow, create_executive_summary_workflow
 
 from app.workflows.single import AgentRunEvent, AgentRunResult
-from llama_index.core.chat_engine.types import ChatMessage
+from llama_index.core.llms import ChatMessage, ChatResponse
 from llama_index.core.workflow import (
     Context,
     Event,
@@ -304,9 +304,12 @@ class IdeatorIncWorkflow(Workflow):
             )
             # Return a failed result object
             return AgentRunResult(
-                response=ChatMessage(
-                    content=f"Failed to complete {workflow_name} due to an error: {str(e)}"
-                )
+                response=ChatResponse(
+                    message=ChatMessage(
+                        content=f"Failed to complete {workflow_name} due to an error: {str(e)}"
+                    )
+                ),
+                sources=[]
             )
     
 def create_idea_research_workflow(session_id: str, chat_history: Optional[List[ChatMessage]] = None, email: Optional[str] = None, **kwargs):
