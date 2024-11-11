@@ -11,8 +11,8 @@ The research workflow is inspired by modern marketing methodologies popularized 
 ## Demo
 
 Hear my pitch on the demo:
-
-![Ideator Inc Demo](https://www.loom.com/share/4553e9b98ba143d3bc6895f286039703?sid=ff3ee1f0-181c-496a-8a0d-9f769cf2e5f6)
+![ideator_inc_thumbnail](https://github.com/user-attachments/assets/821902a4-5ceb-44b0-9895-d45afae6324c)
+[Ideator Inc Demo](https://www.loom.com/share/4553e9b98ba143d3bc6895f286039703?sid=ff3ee1f0-181c-496a-8a0d-9f769cf2e5f6)
 
 ## How It Works
 
