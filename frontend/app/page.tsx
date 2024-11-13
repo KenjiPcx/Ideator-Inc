@@ -68,7 +68,7 @@ export default function Home() {
       ? "/api/validate"
       : selectedAgent !== "Research Assistant"
         ? `${backend}/api/chat`
-        : `${backend}/api/qna`,
+        : `${backend}/api/chat/qna`,
     maxSteps: isIdeaValidated ? 1 : 5,
     headers: {
       "Content-Type": "application/json",
@@ -157,7 +157,8 @@ export default function Home() {
       // You might want to adjust this condition based on your specific needs
       if (
         lastMessage.role === "assistant" &&
-        lastMessage.content.includes("research complete")
+        lastMessage.annotations?.length &&
+        lastMessage.annotations.length > 10
       ) {
         setCanChatWithAssistant(true);
       }

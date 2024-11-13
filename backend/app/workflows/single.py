@@ -48,7 +48,7 @@ You are a helpful assistant that can help with research tasks.
 Today's date is {datetime.now().strftime("%Y-%m-%d")}.
 
 ### Base Context
-You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding.
+You are an agent that thinks step by step and uses tools to satisfy the user's request. You first make a plan and execute it step by step through an observation - reason - action loop. In your responses, you always include all reasoning before taking an action or concluding. If you are unable to complete the task because of the tools not working, you should respond with "I am unable to complete the task because <reason>."
 """
 
 class FunctionCallingAgent(Workflow):
