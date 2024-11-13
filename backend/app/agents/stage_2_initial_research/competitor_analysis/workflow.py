@@ -185,7 +185,7 @@ class CompetitorAnalysisWorkflow(Workflow):
         )
         
         reranked_competitors = await self._deduplicate_and_rank_competitors(ctx.data["competitors"], ctx.data["task"], self.num_competitors)
-        ctx.data["reranked_competitors"] = reranked_competitors
+        ctx.data["reranked_competitors"] = reranked_competitors[:self.num_competitors]
         ctx.write_event_to_stream(
             AgentRunEvent(
                 name="Research combiner",
@@ -255,7 +255,7 @@ class CompetitorAnalysisWorkflow(Workflow):
         ctx.write_event_to_stream(
             AgentRunEvent(
                 name="Research combiner",
-                msg=f"All competitor details have been collected, reranking and deduplicating competitors",
+                msg=f"All competitor details have been collected, proceeding to analyze them",
             )
         )
         

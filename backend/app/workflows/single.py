@@ -250,7 +250,7 @@ class FunctionCallingAgent(Workflow):
                         additional_kwargs=additional_kwargs,
                     )
                 )
-
+                    
         for msg in tool_msgs:
             self.memory.put(msg)
             ctx.write_event_to_stream(

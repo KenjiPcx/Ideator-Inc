@@ -22,9 +22,9 @@ class DefaultSchema(BaseModel):
 
 async def read_webpage(
     url: str,
-    # instruction: str = "Extract the main content of the page, do not summarize the content, include all important details including statistics, quotes, examples, stories, etc",
+    instruction: str = "Extract the main content of the page, do not summarize the content, include all important details including statistics, quotes, examples, stories, etc",
     provider: str = "openai/gpt-4o-mini",
-    # schema: Dict | None = None,
+    schema: Dict | None = DefaultSchema.model_json_schema(),
     openai_api_key: Optional[str] = None,
 ) -> WebReaderResult:
     """
@@ -46,12 +46,18 @@ async def read_webpage(
             result = await crawler.arun(
                 url=url,
                 remove_overlay_elements=True,
+                strategy=LLMExtractionStrategy(
+                    instruction=instruction,
+                    schema=schema,
+                    provider=provider,
+                    openai_api_key=api_key
+                ),
                 magic=True,
                 bypass_cache=True,
             )
         
         return WebReaderResult(
-            content=result.markdown,
+            content=result.extracted_content,
             url=url,
             is_error=False
         )

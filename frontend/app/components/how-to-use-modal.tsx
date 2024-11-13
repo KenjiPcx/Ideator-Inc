@@ -42,7 +42,11 @@ export default function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
             </li>
           </ol>
           <p className="text-sm text-gray-400 mt-4">
-            You can also try a demo idea by clicking the &quot;Demo Idea&quot; button
+            You can also try a demo idea by clicking the &quot;Demo Idea&quot;
+            button
+          </p>
+          <p className="text-sm text-gray-400 mt-4">
+            Please note that this is a run once tool, after the research is done, you can't talk to the manager again, you can refresh the page to use the tool again.
           </p>
         </div>
         <button

@@ -32,7 +32,6 @@ class StartMarketResearchEvent(Event):
 
 class CombineResearchResultsEvent(Event):
     input: str
-    input: str
     
 class CreatePodcastEvent(Event):
     input: str
@@ -41,7 +40,7 @@ class CreateExecutiveSummaryEvent(Event):
     input: str
 
 class CombinePostProductionResultsEvent(Event):
-    input: str
+    pass
 
 class IdeatorIncWorkflow(Workflow):
     def __init__(
@@ -62,7 +61,7 @@ class IdeatorIncWorkflow(Workflow):
         self.post_production_team_size = post_production_team_size
         
     @step()
-    async def start(self, ctx: Context, ev: StartEvent) -> StartCompetitorAnalysisResearchEvent | StartCustomerInsightsResearchEvent | StartOnlineTrendsResearchEvent | StartMarketResearchEvent:
+    async def start(self, ctx: Context, ev: StartEvent) -> StartMarketResearchEvent:
         ctx.data["idea"] = ev.input
         
         ctx.write_event_to_stream(
@@ -190,7 +189,7 @@ class IdeatorIncWorkflow(Workflow):
         
         ctx.data["podcast_result"] = res
         ctx.data["post_production_completed"] = ctx.data.get("post_production_completed", 0) + 1
-        return CombinePostProductionResultsEvent(input=res)
+        return CombinePostProductionResultsEvent()
     
     @step()
     async def executive_summary_generation(self, ctx: Context, ev: CreateExecutiveSummaryEvent, executive_summarizer: Workflow) -> CombinePostProductionResultsEvent:
@@ -206,7 +205,7 @@ class IdeatorIncWorkflow(Workflow):
         
         ctx.data["executive_summary_result"] = res
         ctx.data["post_production_completed"] = ctx.data.get("post_production_completed", 0) + 1
-        return CombinePostProductionResultsEvent(input=res)
+        return CombinePostProductionResultsEvent()
     
     @step()
     async def combine_post_production_results(self, ctx: Context, ev: CombinePostProductionResultsEvent) -> StopEvent:
@@ -244,6 +243,14 @@ class IdeatorIncWorkflow(Workflow):
         {ctx.data.get('executive_summary_result', "None")}
         """
 
+        ctx.write_event_to_stream(
+            AgentRunEvent(
+                name="Ideator Inc Workflow",
+                msg=f"Post production completed and combined results:\n{responses}",
+                workflow_name="Research Manager"
+            )
+        )
+        
         # prompt = PromptTemplate(
         #     dedent("""
         #         ### Instructions
@@ -314,37 +321,37 @@ class IdeatorIncWorkflow(Workflow):
     
 def create_idea_research_workflow(session_id: str, chat_history: Optional[List[ChatMessage]] = None, email: Optional[str] = None, **kwargs):
     # Initial Research Team
-    timeout = 1000
+    timeout = 1200
     competitor_researcher = create_competitor_analysis_workflow(
         session_id=session_id, 
         chat_history=chat_history, 
         email=email, 
-        num_queries=3, 
-        max_critic_iterations=3, 
+        num_queries=2, 
+        max_critic_iterations=2, 
         timeout=timeout
     )
     customer_insights_researcher = create_customer_insights_workflow(
         session_id=session_id, 
         chat_history=chat_history, 
         email=email, 
-        num_queries=3, 
-        max_critic_iterations=3, 
+        num_queries=2, 
+        max_critic_iterations=2, 
         timeout=timeout
     )
     online_trends_researcher = create_online_trends_workflow(
         session_id=session_id, 
         chat_history=chat_history, 
         email=email, 
-        num_queries=3, 
-        max_critic_iterations=3, 
+        num_queries=2, 
+        max_critic_iterations=2, 
         timeout=timeout
     )
     market_research_researcher = create_market_research_workflow(
         session_id=session_id, 
         chat_history=chat_history, 
         email=email, 
-        num_queries=3, 
-        max_critic_iterations=3, 
+        num_queries=2, 
+        max_critic_iterations=2, 
         timeout=timeout
     )
     
@@ -352,16 +359,18 @@ def create_idea_research_workflow(session_id: str, chat_history: Optional[List[C
     podcast_generator = create_podcast_workflow(
         session_id=session_id, 
         chat_history=chat_history, 
-        timeout=1800
+        timeout=1800,
+        max_iterations=1
     )
     executive_summarizer = create_executive_summary_workflow(
         session_id=session_id, 
         chat_history=chat_history, 
         email=email,
-        timeout=1800
+        timeout=1800,
+        max_iterations=1
     )
 
-    workflow = IdeatorIncWorkflow(session_id=session_id, timeout=3600, chat_history=chat_history)
+    workflow = IdeatorIncWorkflow(session_id=session_id, timeout=3600, chat_history=chat_history, initial_team_size=1, post_production_team_size=2)
 
     workflow.add_workflows(
         competitor_researcher=competitor_researcher,

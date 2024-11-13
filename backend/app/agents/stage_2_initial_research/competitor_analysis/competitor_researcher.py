@@ -58,22 +58,22 @@ def create_competitor_researcher(chat_history: List[ChatMessage]):
     def scrape_product_details(url: str, product_name: str):
         return read_webpage(
             url=url,
-            # schema=ProductDetails.model_json_schema(),
-            # instruction=f"Extract detailed product information for {product_name} from their official website."
+            schema=ProductDetails.model_json_schema(),
+            instruction=f"Extract detailed product information for {product_name} from their official website."
         )
     
     def scrape_pricing(url: str, product_name: str):
         return read_webpage(
             url=url,
-            # schema=PricingInfo.model_json_schema(),
-            # instruction=f"Extract detailed pricing information for {product_name}. Include all plans, features, and special offers."
+            schema=PricingInfo.model_json_schema(),
+            instruction=f"Extract detailed pricing information for {product_name}. Include all plans, features, and special offers."
         )
     
     def scrape_reviews(url: str, product_name: str):
         return read_webpage(
             url=url,
-            # schema=ReviewSummary.model_json_schema(),
-            # instruction=f"Analyze user reviews and feedback for {product_name}. Summarize key positive and negative points."
+            schema=ReviewSummary.model_json_schema(),
+            instruction=f"Analyze user reviews and feedback for {product_name}. Summarize key positive and negative points."
         )
 
 

@@ -203,7 +203,7 @@ export default function Home() {
             setIsModalOpen(true);
           }}
           position={{ x: 0, y: 0 }}
-          canChat={true}
+          canChat={!canChatWithAssistant}
         />
 
         <div className="col-span-2">

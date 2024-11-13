@@ -16,8 +16,8 @@ def create_reddit_researcher(chat_history: List[ChatMessage]):
         
     async def read_reddit_post(url: str):
         return await read_webpage(
-            url
-            # instruction="Extract the main content of the Reddit post, and the comments from the thread, ignore all other content"   
+            url,
+            instruction="Extract the main content of the Reddit post, and the comments from the thread, ignore all other content"   
         )
     
     tools = [

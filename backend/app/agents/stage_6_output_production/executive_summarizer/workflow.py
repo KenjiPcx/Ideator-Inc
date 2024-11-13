@@ -221,13 +221,13 @@ class ExecutiveSummaryWorkflow(Workflow):
             )
             raise
 
-def create_executive_summary_workflow(session_id: str, chat_history: List[ChatMessage], email: Optional[str] = None, timeout: int = 1800):
+def create_executive_summary_workflow(session_id: str, chat_history: List[ChatMessage], email: Optional[str] = None, timeout: int = 1800, max_iterations: int = 3):
     workflow = ExecutiveSummaryWorkflow(
         session_id=session_id,
         chat_history=chat_history,
         email=email,
         timeout=timeout,
-        max_iterations=3
+        max_iterations=max_iterations
     )
     
     outline_writer = create_outline_writer(chat_history)

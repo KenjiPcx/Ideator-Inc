@@ -207,11 +207,12 @@ class PodcastWorkflow(Workflow):
             )
             raise
 
-def create_podcast_workflow(session_id: str, chat_history: List[ChatMessage], timeout: int = 1800):
+def create_podcast_workflow(session_id: str, chat_history: List[ChatMessage], timeout: int = 1800, max_iterations: int = 3):
     workflow = PodcastWorkflow(
         session_id=session_id,
         chat_history=chat_history,
-        timeout=timeout
+        timeout=timeout,
+        max_iterations=max_iterations
     )
     
     outline_writer = create_outline_writer(chat_history)
