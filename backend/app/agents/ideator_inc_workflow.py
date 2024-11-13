@@ -61,7 +61,7 @@ class IdeatorIncWorkflow(Workflow):
         self.post_production_team_size = post_production_team_size
         
     @step()
-    async def start(self, ctx: Context, ev: StartEvent) -> StartMarketResearchEvent:
+    async def start(self, ctx: Context, ev: StartEvent) -> StartMarketResearchEvent | StartCustomerInsightsResearchEvent | StartOnlineTrendsResearchEvent | StartCompetitorAnalysisResearchEvent:
         ctx.data["idea"] = ev.input
         
         ctx.write_event_to_stream(
