@@ -370,7 +370,7 @@ def create_idea_research_workflow(session_id: str, chat_history: Optional[List[C
         max_iterations=1
     )
 
-    workflow = IdeatorIncWorkflow(session_id=session_id, timeout=3600, chat_history=chat_history, initial_team_size=1, post_production_team_size=2)
+    workflow = IdeatorIncWorkflow(session_id=session_id, timeout=3600, chat_history=chat_history, initial_team_size=4, post_production_team_size=2)
 
     workflow.add_workflows(
         competitor_researcher=competitor_researcher,
